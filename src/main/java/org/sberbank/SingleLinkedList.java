@@ -92,10 +92,10 @@ public class SingleLinkedList<T> implements List<T> {
             return null;
         }
         ElementList<T> currentElement = this.first;
-        for (int indexElement = 0; indexElement < indexSearch; ++indexElement) {
+        for (int indexElement = 0; indexElement <= indexSearch; ++indexElement) {
             currentElement = currentElement.getNext();
             if (currentElement == null) {
-                throw new RuntimeException("Too much index");
+                throw new IndexOutOfBoundsException("Too much index");
             }
         }
         return currentElement;
