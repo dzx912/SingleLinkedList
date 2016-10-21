@@ -38,6 +38,7 @@ public class SingleLinkedList<T> implements List<T> {
         ElementList<T> newElement = new ElementList<>(value);
         this.last.setNext(newElement);
         this.last = newElement;
+        this.size += 1;
         return true;
     }
 
