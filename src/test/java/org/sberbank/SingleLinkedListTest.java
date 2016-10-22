@@ -87,4 +87,22 @@ public class SingleLinkedListTest {
         linkedList.get(-1);
     }
 
+    @Test
+    public void testSet() {
+        List<Integer> linkedList = new SingleLinkedList<>();
+        linkedList.add(1);
+        linkedList.add(2);
+        linkedList.add(3);
+        linkedList.add(4);
+        linkedList.add(5);
+
+        assertEquals(linkedList.get(0), new Integer(1));
+        linkedList.set(0, 6);
+        assertEquals(linkedList.get(0), new Integer(6));
+
+        assertEquals(linkedList.get(4), new Integer(5));
+        linkedList.set(4, 7);
+        assertEquals(linkedList.get(4), new Integer(7));
+    }
+
 }
