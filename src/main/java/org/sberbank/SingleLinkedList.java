@@ -89,7 +89,7 @@ public class SingleLinkedList<T> implements List<T> {
 
     private ElementList<T> search(int indexSearch) {
         if (isEmpty()) {
-            return null;
+            throw new IndexOutOfBoundsException("Doesn't have any elements");
         }
         ElementList<T> currentElement = this.first;
         for (int indexElement = 0; indexElement <= indexSearch; ++indexElement) {

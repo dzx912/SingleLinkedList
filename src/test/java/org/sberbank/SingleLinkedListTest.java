@@ -1,6 +1,8 @@
 package org.sberbank;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
@@ -11,6 +13,10 @@ import static org.junit.Assert.*;
  * @since 21.10.16.
  */
 public class SingleLinkedListTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void size() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>();
@@ -56,14 +62,29 @@ public class SingleLinkedListTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testIndexOutOfBoundsException() {
+        new SingleLinkedList<>().get(0);
+    }
+
+    @Test
+    public void testOutOfBounds() {
         List<Integer> linkedList = new SingleLinkedList<>();
+
+        thrown.expect(IndexOutOfBoundsException.class);
+
+        //First exception
+        linkedList.get(0);
+
         linkedList.add(5);
         linkedList.add(4);
         linkedList.add(3);
         linkedList.add(2);
         linkedList.add(1);
 
+        //Second exception
         linkedList.get(5);
+
+        //Third exception
+        linkedList.get(-1);
     }
 
 }
