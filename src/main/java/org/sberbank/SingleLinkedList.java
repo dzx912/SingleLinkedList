@@ -11,7 +11,6 @@ import java.util.ListIterator;
 public class SingleLinkedList<T> implements List<T> {
     private ElementList<T> first;
     private ElementList<T> last;
-    private T value;
     private int size;
 
     public SingleLinkedList() {
