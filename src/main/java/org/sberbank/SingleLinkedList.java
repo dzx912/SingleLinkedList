@@ -7,6 +7,7 @@ import java.util.ListIterator;
 
 /**
  * Created by Anton Lenok on 02.10.16.
+ * Class for training implementation single linked list
  */
 public class SingleLinkedList<T> implements List<T> {
     private ElementList<T> first;
