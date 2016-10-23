@@ -67,8 +67,8 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public T remove(int index) {
-        //TODO: Первый элемент
-        //TODO: Последний элемент
+        //TODO: First element
+        //TODO: Last element
         ElementList<T> searchElement = search(index - 1);
         ElementList<T> removedElement = searchElement.getNext();
         searchElement.setNext(removedElement.getNext());
