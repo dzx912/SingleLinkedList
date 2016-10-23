@@ -25,8 +25,9 @@ public class SingleLinkedList<T> implements List<T> {
         return this.size == 0;
     }
 
-    public boolean contains(Object o) {
-        return false;
+    public boolean contains(Object inputObject) {
+        boolean find = indexOf(inputObject) != -1;
+        return find;
     }
 
     public Iterator<T> iterator() {
@@ -78,8 +79,17 @@ public class SingleLinkedList<T> implements List<T> {
         return new Object[0];
     }
 
-    public int indexOf(Object o) {
-        return 0;
+    public int indexOf(Object inputObject) {
+        //TODO: Find correct way check instanceof
+        T searchObject = (T) inputObject;
+        Iterator<T> iterator = iterator();
+        for (int indexSearch = 0; iterator.hasNext(); indexSearch++) {
+            T element = iterator.next();
+            if (element.equals(searchObject)) {
+                return indexSearch;
+            }
+        }
+        return -1;
     }
 
     public int lastIndexOf(Object o) {
