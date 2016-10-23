@@ -5,9 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -222,6 +220,45 @@ public class SingleLinkedListTest {
             assertEquals(convertArraySameSize[indexConvertArray].getClass(), Integer.class);
             assertEquals(convertArraySameSize[indexConvertArray], CHECK_ARRAY.get(indexConvertArray));
             assertEquals(intArrayList.get(indexConvertArray), CHECK_ARRAY.get(indexConvertArray));
+        }
+    }
+
+    @Test
+    public void remove() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>();
+        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+
+        linkedList.remove(1);
+        checkRemovedList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+
+        linkedList.remove(0);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
+
+        linkedList.remove(4);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5));
+
+        thrown.expect(IndexOutOfBoundsException.class);
+        linkedList.remove(7);
+
+        linkedList.remove(2);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 5));
+
+        linkedList.remove(1);
+        checkRemovedList(linkedList, Arrays.asList(3, 5));
+
+        linkedList.remove(1);
+        checkRemovedList(linkedList, Collections.singletonList(3));
+
+        linkedList.remove(0);
+        checkRemovedList(linkedList, new ArrayList<>());
+    }
+
+    private void checkRemovedList(List<Integer> linkedList, List<Integer> checkArray) {
+        assertEquals(linkedList.size(), checkArray.size());
+        Iterator<Integer> iterator = linkedList.iterator();
+        for (int indexRemovedArray = 0; iterator.hasNext(); indexRemovedArray++) {
+            Integer element = iterator.next();
+            assertEquals(element, checkArray.get(indexRemovedArray));
         }
     }
 }
