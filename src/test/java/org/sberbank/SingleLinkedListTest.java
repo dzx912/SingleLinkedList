@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public class SingleLinkedListTest {
 
-    List<Integer> linkedListComman;
+    List<Integer> linkedListCommon;
 
 
     @Rule
@@ -24,29 +24,44 @@ public class SingleLinkedListTest {
 
     @Before
     public void init() {
-        linkedListComman = new SingleLinkedList<>();
-        linkedListComman.add(5);
-        linkedListComman.add(4);
-        linkedListComman.add(3);
-        linkedListComman.add(2);
-        linkedListComman.add(1);
+        linkedListCommon = new SingleLinkedList<>();
+        linkedListCommon.add(5);
+        linkedListCommon.add(4);
+        linkedListCommon.add(3);
+        linkedListCommon.add(2);
+        linkedListCommon.add(1);
+        linkedListCommon.add(5);
+        linkedListCommon.add(6);
     }
 
     @Test
     public void contains() throws Exception {
-        assertTrue(linkedListComman.contains(1));
-        assertFalse(linkedListComman.contains(6));
+        assertTrue(linkedListCommon.contains(5));
+        assertTrue(linkedListCommon.contains(1));
+        assertTrue(linkedListCommon.contains(6));
+        assertFalse(linkedListCommon.contains(7));
 
-        assertFalse(linkedListComman.contains(new ArrayList<>()));
+        assertFalse(linkedListCommon.contains(new ArrayList<>()));
     }
 
     @Test
     public void indexOf() throws Exception {
-        assertEquals(linkedListComman.indexOf(1), 4);
-        assertEquals(linkedListComman.indexOf(5), 0);
-        assertEquals(linkedListComman.indexOf(6), -1);
+        assertEquals(linkedListCommon.indexOf(5), 0);
+        assertEquals(linkedListCommon.indexOf(1), 4);
+        assertEquals(linkedListCommon.indexOf(6), 6);
+        assertEquals(linkedListCommon.indexOf(7), -1);
 
-        assertEquals(linkedListComman.indexOf(new ArrayList<>()), -1);
+        assertEquals(linkedListCommon.indexOf(new ArrayList<>()), -1);
+    }
+
+    @Test
+    public void lastIndexOf() throws Exception {
+        assertEquals(linkedListCommon.lastIndexOf(1), 4);
+        assertEquals(linkedListCommon.lastIndexOf(5), 5);
+        assertEquals(linkedListCommon.lastIndexOf(6), 6);
+        assertEquals(linkedListCommon.lastIndexOf(7), -1);
+
+        assertEquals(linkedListCommon.lastIndexOf(new ArrayList<>()), -1);
     }
 
     @Test
@@ -78,11 +93,12 @@ public class SingleLinkedListTest {
 
     @Test
     public void get() throws Exception {
-        assertEquals(linkedListComman.get(4), new Integer(1));
-        assertEquals(linkedListComman.get(3), new Integer(2));
-        assertEquals(linkedListComman.get(2), new Integer(3));
-        assertEquals(linkedListComman.get(1), new Integer(4));
-        assertEquals(linkedListComman.get(0), new Integer(5));
+        assertEquals(linkedListCommon.get(5), new Integer(5));
+        assertEquals(linkedListCommon.get(4), new Integer(1));
+        assertEquals(linkedListCommon.get(3), new Integer(2));
+        assertEquals(linkedListCommon.get(2), new Integer(3));
+        assertEquals(linkedListCommon.get(1), new Integer(4));
+        assertEquals(linkedListCommon.get(0), new Integer(5));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -91,15 +107,15 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void testOutOfBounds() {
+    public void testOutOfBounds() throws Exception {
         thrown.expect(IndexOutOfBoundsException.class);
 
-        linkedListComman.get(5);
-        linkedListComman.get(-1);
+        linkedListCommon.get(7);
+        linkedListCommon.get(-1);
     }
 
     @Test
-    public void testSet() {
+    public void testSet() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>();
         linkedList.add(1);
         linkedList.add(2);

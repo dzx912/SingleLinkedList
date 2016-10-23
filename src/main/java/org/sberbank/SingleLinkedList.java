@@ -93,8 +93,18 @@ public class SingleLinkedList<T> implements List<T> {
         return -1;
     }
 
-    public int lastIndexOf(Object o) {
-        return 0;
+    public int lastIndexOf(Object inputObject) {
+        //TODO: Find correct way check instanceof
+        T searchObject = (T) inputObject;
+        Iterator<T> iterator = iterator();
+        int find = -1;
+        for (int indexSearch = 0; iterator.hasNext(); indexSearch++) {
+            T element = iterator.next();
+            if (element.equals(searchObject)) {
+                find = indexSearch;
+            }
+        }
+        return find;
     }
 
     private ElementList<T> search(int indexSearch) {
