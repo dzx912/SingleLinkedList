@@ -1,5 +1,7 @@
 package org.sberbank;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,10 +15,21 @@ public class MainApp {
         linkedList.add(2);
         linkedList.add(3);
 
-//        for (Integer value : linkedList) {
-//            System.out.println(value);
-//        }
-
         linkedList.stream().forEach(value -> System.out.println(value));
+
+        ArrayList<Integer> intArrayList = new ArrayList<>();
+        intArrayList.add(1);
+        intArrayList.add(2);
+        intArrayList.add(3);
+
+        Integer[] intArray = new Integer[]{4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3};
+
+        Integer[] integers = intArrayList.toArray(intArray);
+        System.out.println("---");
+        Arrays.stream(integers).forEach(value -> System.out.println(value));
+        System.out.println("---");
+        Arrays.stream(intArray).forEach(value -> System.out.println(value));
+        System.out.println("---");
+        intArrayList.forEach(value -> System.out.println(value));
     }
 }

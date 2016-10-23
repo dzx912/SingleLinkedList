@@ -1,9 +1,6 @@
 package org.sberbank;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Created by Anton Lenok on 02.10.16.
@@ -77,7 +74,13 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public Object[] toArray() {
-        return new Object[0];
+        Object[] outputArray = new Object[size()];
+        Iterator<T> iterator = iterator();
+        for (int indexArray = 0; iterator.hasNext(); indexArray++) {
+            T element = iterator.next();
+            outputArray[indexArray] = element;
+        }
+        return outputArray;
     }
 
     public int indexOf(Object inputObject) {
@@ -121,8 +124,15 @@ public class SingleLinkedList<T> implements List<T> {
         return currentElement;
     }
 
-    public <T1> T1[] toArray(T1[] a) {
-        return null;
+    public <T1> T1[] toArray(T1[] inputArray) {
+        if (inputArray.length < size()) {
+            return (T1[]) Arrays.copyOf(toArray(), size(), inputArray.getClass());
+        }
+        System.arraycopy(toArray(), 0, inputArray, 0, size());
+        if (inputArray.length > size) {
+            inputArray[size] = null;
+        }
+        return inputArray;
     }
 
     public boolean remove(Object o) {
