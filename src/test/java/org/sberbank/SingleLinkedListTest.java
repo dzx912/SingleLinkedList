@@ -242,33 +242,33 @@ public class SingleLinkedListTest {
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(4));
-        checkRemovedList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+        checkTwoList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
 
         removed = linkedList.remove(0);
         assertEquals(removed, new Integer(5));
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
 
         removed = linkedList.remove(4);
         assertEquals(removed, new Integer(6));
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 1, 5));
 
         linkedList.remove(7);
 
         removed = linkedList.remove(2);
         assertEquals(removed, new Integer(1));
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 5));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 5));
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(2));
-        checkRemovedList(linkedList, Arrays.asList(3, 5));
+        checkTwoList(linkedList, Arrays.asList(3, 5));
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(5));
-        checkRemovedList(linkedList, Collections.singletonList(3));
+        checkTwoList(linkedList, Collections.singletonList(3));
 
         removed = linkedList.remove(0);
         assertEquals(removed, new Integer(3));
-        checkRemovedList(linkedList, new ArrayList<>());
+        checkTwoList(linkedList, new ArrayList<>());
 
         linkedList.remove(0);
     }
@@ -281,38 +281,38 @@ public class SingleLinkedListTest {
 
         isRemoved = linkedList.remove(new Integer(4));
         assertEquals(isRemoved, true);
-        checkRemovedList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+        checkTwoList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
 
         isRemoved = linkedList.remove(new Integer(5));
         assertEquals(isRemoved, true);
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 6));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 1, 6));
 
         isRemoved = linkedList.remove(new Integer(6));
         assertEquals(isRemoved, true);
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 1));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 1));
 
         isRemoved = linkedList.remove(new Integer(5));
         assertEquals(isRemoved, false);
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 1));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 1));
 
         isRemoved = linkedList.remove("Wrong type");
         assertEquals(isRemoved, false);
-        checkRemovedList(linkedList, Arrays.asList(3, 2, 1));
+        checkTwoList(linkedList, Arrays.asList(3, 2, 1));
 
         isRemoved = linkedList.remove(new Integer(3));
         assertEquals(isRemoved, true);
-        checkRemovedList(linkedList, Arrays.asList(2, 1));
+        checkTwoList(linkedList, Arrays.asList(2, 1));
 
         isRemoved = linkedList.remove(new Integer(1));
         assertEquals(isRemoved, true);
-        checkRemovedList(linkedList, Collections.singletonList(2));
+        checkTwoList(linkedList, Collections.singletonList(2));
 
         isRemoved = linkedList.remove(new Integer(2));
         assertEquals(isRemoved, true);
-        checkRemovedList(linkedList, new ArrayList<>());
+        checkTwoList(linkedList, new ArrayList<>());
     }
 
-    private void checkRemovedList(List<Integer> linkedList, List<Integer> checkArray) {
+    private void checkTwoList(List<Integer> linkedList, List<Integer> checkArray) {
         assertEquals(linkedList.size(), checkArray.size());
         Iterator<Integer> iterator = linkedList.iterator();
         for (int indexRemovedArray = 0; iterator.hasNext(); indexRemovedArray++) {
@@ -325,5 +325,35 @@ public class SingleLinkedListTest {
     public void containsAll() throws Exception {
         assertTrue(linkedListCommon.containsAll(Arrays.asList(1, 2, 3)));
         assertFalse(linkedListCommon.containsAll(Arrays.asList(1, 2, 3, 7)));
+    }
+
+    @Test
+    public void addAll() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>();
+        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+
+        assertFalse(linkedList.addAll(new ArrayList<>()));
+        checkTwoList(linkedList, CHECK_ARRAY);
+
+        assertTrue(linkedList.addAll(Arrays.asList(0, 9, 8, 7)));
+        checkTwoList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+    }
+
+    @Test
+    public void addAllIndex() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>();
+        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+
+        assertTrue(linkedList.addAll(0, new ArrayList<>()));
+        checkTwoList(linkedList, CHECK_ARRAY);
+
+        assertTrue(linkedList.addAll(CHECK_ARRAY.size() - 1, Arrays.asList(0, 9, 8, 7)));
+        checkTwoList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+
+        assertTrue(linkedList.addAll(2, Arrays.asList(11, 12, 13, 14)));
+        checkTwoList(linkedList, Arrays.asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6, 0, 9, 8, 7));
+
+        thrown.expect(IndexOutOfBoundsException.class);
+        assertTrue(linkedList.addAll(linkedList.size(), Arrays.asList(0, 9, 8, 7)));
     }
 }

@@ -59,9 +59,15 @@ public class SingleLinkedList<T> implements List<T> {
 
     public void add(int index, T element) {
         ElementList<T> searchElement = search(index);
-        ElementList<T> newElement = new ElementList<>(element);
-        newElement.setNext(searchElement.getNext());
-        searchElement.setNext(newElement);
+        add(element, searchElement);
+    }
+
+    private ElementList<T> add(T addElement, ElementList<T> beforeElement) {
+        ElementList<T> newElement = new ElementList<>(addElement);
+        newElement.setNext(beforeElement.getNext());
+        beforeElement.setNext(newElement);
+        this.size += 1;
+        return newElement;
     }
 
     public T remove(int index) {
@@ -144,12 +150,19 @@ public class SingleLinkedList<T> implements List<T> {
         return collection.stream().allMatch(this::contains);
     }
 
-    public boolean addAll(Collection<? extends T> c) {
-        return false;
+    public boolean addAll(Collection<? extends T> collection) {
+        collection.stream().forEach(this::add);
+        return !collection.isEmpty();
     }
 
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return false;
+    public boolean addAll(int index, Collection<? extends T> collection) {
+        int sizeBefore = size();
+        ElementList<T> searchElement = search(index);
+        for (T element : collection) {
+            searchElement = add(element, searchElement);
+        }
+        int sizeAfter = size();
+        return sizeAfter == sizeBefore + collection.size();
     }
 
     public boolean removeAll(Collection<?> c) {
