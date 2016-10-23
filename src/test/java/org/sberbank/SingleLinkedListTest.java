@@ -226,6 +226,10 @@ public class SingleLinkedListTest {
     @Test
     public void remove() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>();
+
+        thrown.expect(IndexOutOfBoundsException.class);
+        linkedList.remove(0);
+
         CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
 
         Integer removed;
@@ -242,7 +246,6 @@ public class SingleLinkedListTest {
         assertEquals(removed, new Integer(6));
         checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5));
 
-        thrown.expect(IndexOutOfBoundsException.class);
         linkedList.remove(7);
 
         removed = linkedList.remove(2);
@@ -253,12 +256,53 @@ public class SingleLinkedListTest {
         assertEquals(removed, new Integer(2));
         checkRemovedList(linkedList, Arrays.asList(3, 5));
 
-        linkedList.remove(1);
+        removed = linkedList.remove(1);
         assertEquals(removed, new Integer(5));
         checkRemovedList(linkedList, Collections.singletonList(3));
 
-        linkedList.remove(0);
+        removed = linkedList.remove(0);
         assertEquals(removed, new Integer(3));
+        checkRemovedList(linkedList, new ArrayList<>());
+
+        linkedList.remove(0);
+    }
+
+    @Test
+    public void removeObject() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>();
+        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+        boolean isRemoved;
+
+        isRemoved = linkedList.remove(new Integer(4));
+        assertEquals(isRemoved, true);
+        checkRemovedList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+
+        isRemoved = linkedList.remove(new Integer(5));
+        assertEquals(isRemoved, true);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 6));
+
+        isRemoved = linkedList.remove(new Integer(6));
+        assertEquals(isRemoved, true);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 1));
+
+        isRemoved = linkedList.remove(new Integer(5));
+        assertEquals(isRemoved, false);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 1));
+
+        isRemoved = linkedList.remove("Wrong type");
+        assertEquals(isRemoved, false);
+        checkRemovedList(linkedList, Arrays.asList(3, 2, 1));
+
+        isRemoved = linkedList.remove(new Integer(3));
+        assertEquals(isRemoved, true);
+        checkRemovedList(linkedList, Arrays.asList(2, 1));
+
+        isRemoved = linkedList.remove(new Integer(1));
+        assertEquals(isRemoved, true);
+        checkRemovedList(linkedList, Collections.singletonList(2));
+
+        isRemoved = linkedList.remove(new Integer(2));
+        assertEquals(isRemoved, true);
         checkRemovedList(linkedList, new ArrayList<>());
     }
 

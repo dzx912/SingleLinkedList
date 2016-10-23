@@ -134,8 +134,14 @@ public class SingleLinkedList<T> implements List<T> {
         return inputArray;
     }
 
-    public boolean remove(Object o) {
-        return false;
+    public boolean remove(Object removedElement) {
+        int indexRemovedElement;
+        boolean find = false;
+        while (-1 != (indexRemovedElement = indexOf(removedElement))) {
+            remove(indexRemovedElement);
+            find = true;
+        }
+        return find;
     }
 
     public boolean containsAll(Collection<?> c) {
