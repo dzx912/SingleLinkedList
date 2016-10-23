@@ -228,28 +228,37 @@ public class SingleLinkedListTest {
         List<Integer> linkedList = new SingleLinkedList<>();
         CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
 
-        linkedList.remove(1);
+        Integer removed;
+
+        removed = linkedList.remove(1);
+        assertEquals(removed, new Integer(4));
         checkRemovedList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
 
-        linkedList.remove(0);
+        removed = linkedList.remove(0);
+        assertEquals(removed, new Integer(5));
         checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
 
-        linkedList.remove(4);
+        removed = linkedList.remove(4);
+        assertEquals(removed, new Integer(6));
         checkRemovedList(linkedList, Arrays.asList(3, 2, 1, 5));
 
         thrown.expect(IndexOutOfBoundsException.class);
         linkedList.remove(7);
 
-        linkedList.remove(2);
+        removed = linkedList.remove(2);
+        assertEquals(removed, new Integer(1));
         checkRemovedList(linkedList, Arrays.asList(3, 2, 5));
 
-        linkedList.remove(1);
+        removed = linkedList.remove(1);
+        assertEquals(removed, new Integer(2));
         checkRemovedList(linkedList, Arrays.asList(3, 5));
 
         linkedList.remove(1);
+        assertEquals(removed, new Integer(5));
         checkRemovedList(linkedList, Collections.singletonList(3));
 
         linkedList.remove(0);
+        assertEquals(removed, new Integer(3));
         checkRemovedList(linkedList, new ArrayList<>());
     }
 
