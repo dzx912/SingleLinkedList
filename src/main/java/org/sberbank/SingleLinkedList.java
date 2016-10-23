@@ -82,9 +82,7 @@ public class SingleLinkedList<T> implements List<T> {
         return outputArray;
     }
 
-    public int indexOf(Object inputObject) {
-        //TODO: Find correct way check instanceof
-        T searchObject = (T) inputObject;
+    public int indexOf(Object searchObject) {
         Iterator<T> iterator = iterator();
         for (int indexSearch = 0; iterator.hasNext(); indexSearch++) {
             T element = iterator.next();
@@ -95,9 +93,7 @@ public class SingleLinkedList<T> implements List<T> {
         return -1;
     }
 
-    public int lastIndexOf(Object inputObject) {
-        //TODO: Find correct way check instanceof
-        T searchObject = (T) inputObject;
+    public int lastIndexOf(Object searchObject) {
         Iterator<T> iterator = iterator();
         int find = -1;
         for (int indexSearch = 0; iterator.hasNext(); indexSearch++) {
@@ -123,9 +119,9 @@ public class SingleLinkedList<T> implements List<T> {
         return currentElement;
     }
 
-    public <T1> T1[] toArray(T1[] inputArray) {
+    public <U> U[] toArray(U[] inputArray) {
         if (inputArray.length < size()) {
-            return (T1[]) Arrays.copyOf(toArray(), size(), inputArray.getClass());
+            return (U[]) Arrays.copyOf(toArray(), size(), inputArray.getClass());
         }
         System.arraycopy(toArray(), 0, inputArray, 0, size());
         if (inputArray.length > size) {
@@ -144,8 +140,8 @@ public class SingleLinkedList<T> implements List<T> {
         return find;
     }
 
-    public boolean containsAll(Collection<?> c) {
-        return false;
+    public boolean containsAll(Collection<?> collection) {
+        return collection.stream().allMatch(this::contains);
     }
 
     public boolean addAll(Collection<? extends T> c) {

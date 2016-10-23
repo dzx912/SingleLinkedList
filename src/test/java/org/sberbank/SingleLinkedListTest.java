@@ -104,8 +104,14 @@ public class SingleLinkedListTest {
         assertTrue(linkedListCommon.contains(1));
         assertTrue(linkedListCommon.contains(6));
         assertFalse(linkedListCommon.contains(7));
+        assertFalse(linkedListCommon.contains(null));
 
         assertFalse(linkedListCommon.contains(new ArrayList<>()));
+    }
+
+    @Test
+    public void containsStandard() throws Exception {
+        assertFalse(CHECK_ARRAY.contains(null));
     }
 
     @Test
@@ -313,5 +319,11 @@ public class SingleLinkedListTest {
             Integer element = iterator.next();
             assertEquals(element, checkArray.get(indexRemovedArray));
         }
+    }
+
+    @Test
+    public void containsAll() throws Exception {
+        assertTrue(linkedListCommon.containsAll(Arrays.asList(1, 2, 3)));
+        assertFalse(linkedListCommon.containsAll(Arrays.asList(1, 2, 3, 7)));
     }
 }
