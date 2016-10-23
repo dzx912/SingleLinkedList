@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  */
 public class SingleLinkedListTest {
 
-    List<Integer> linkedListCommon;
+    private List<Integer> linkedListCommon;
     private final static List<Integer> CHECK_ARRAY = Arrays.asList(5, 4, 3, 2, 1, 5, 6);
     private final static List<Integer> CHECK_ARRAY_BIGGER = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
 
@@ -25,8 +25,7 @@ public class SingleLinkedListTest {
 
     @Before
     public void init() {
-        linkedListCommon = new SingleLinkedList<>();
-        CHECK_ARRAY.stream().forEach(value -> linkedListCommon.add(value));
+        linkedListCommon = new SingleLinkedList<>(CHECK_ARRAY);
     }
 
     @Test
@@ -187,8 +186,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void toArraySameTypeCheck() throws Exception {
-
+    public void toArraySameTypeStandard() throws Exception {
         List<Integer> intArrayList = new ArrayList<>();
         intArrayList.addAll(CHECK_ARRAY);
         Integer[] firstEmptyArray = new Integer[0];
@@ -236,83 +234,83 @@ public class SingleLinkedListTest {
         thrown.expect(IndexOutOfBoundsException.class);
         linkedList.remove(0);
 
-        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+        linkedList.addAll(CHECK_ARRAY);
 
         Integer removed;
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(4));
-        checkTwoList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+        assertList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
 
         removed = linkedList.remove(0);
         assertEquals(removed, new Integer(5));
-        checkTwoList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
+        assertList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
 
         removed = linkedList.remove(4);
         assertEquals(removed, new Integer(6));
-        checkTwoList(linkedList, Arrays.asList(3, 2, 1, 5));
+        assertList(linkedList, Arrays.asList(3, 2, 1, 5));
 
         linkedList.remove(7);
 
         removed = linkedList.remove(2);
         assertEquals(removed, new Integer(1));
-        checkTwoList(linkedList, Arrays.asList(3, 2, 5));
+        assertList(linkedList, Arrays.asList(3, 2, 5));
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(2));
-        checkTwoList(linkedList, Arrays.asList(3, 5));
+        assertList(linkedList, Arrays.asList(3, 5));
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(5));
-        checkTwoList(linkedList, Collections.singletonList(3));
+        assertList(linkedList, Collections.singletonList(3));
 
         removed = linkedList.remove(0);
         assertEquals(removed, new Integer(3));
-        checkTwoList(linkedList, new ArrayList<>());
+        assertList(linkedList, new ArrayList<>());
 
         linkedList.remove(0);
     }
 
     @Test
     public void removeObject() throws Exception {
-        List<Integer> linkedList = new SingleLinkedList<>();
-        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
         boolean isRemoved;
 
         isRemoved = linkedList.remove(new Integer(4));
         assertEquals(isRemoved, true);
-        checkTwoList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+        assertList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
 
         isRemoved = linkedList.remove(new Integer(5));
         assertEquals(isRemoved, true);
-        checkTwoList(linkedList, Arrays.asList(3, 2, 1, 6));
+        assertList(linkedList, Arrays.asList(3, 2, 1, 6));
 
         isRemoved = linkedList.remove(new Integer(6));
         assertEquals(isRemoved, true);
-        checkTwoList(linkedList, Arrays.asList(3, 2, 1));
+        assertList(linkedList, Arrays.asList(3, 2, 1));
 
         isRemoved = linkedList.remove(new Integer(5));
         assertEquals(isRemoved, false);
-        checkTwoList(linkedList, Arrays.asList(3, 2, 1));
+        assertList(linkedList, Arrays.asList(3, 2, 1));
 
         isRemoved = linkedList.remove("Wrong type");
         assertEquals(isRemoved, false);
-        checkTwoList(linkedList, Arrays.asList(3, 2, 1));
+        assertList(linkedList, Arrays.asList(3, 2, 1));
 
         isRemoved = linkedList.remove(new Integer(3));
         assertEquals(isRemoved, true);
-        checkTwoList(linkedList, Arrays.asList(2, 1));
+        assertList(linkedList, Arrays.asList(2, 1));
 
         isRemoved = linkedList.remove(new Integer(1));
         assertEquals(isRemoved, true);
-        checkTwoList(linkedList, Collections.singletonList(2));
+        assertList(linkedList, Collections.singletonList(2));
 
         isRemoved = linkedList.remove(new Integer(2));
         assertEquals(isRemoved, true);
-        checkTwoList(linkedList, new ArrayList<>());
+        assertList(linkedList, new ArrayList<>());
     }
 
-    private void checkTwoList(List<Integer> linkedList, List<Integer> checkArray) {
+    private void assertList(List<Integer> linkedList, List<Integer> checkArray) {
         assertEquals(linkedList.size(), checkArray.size());
         Iterator<Integer> iterator = linkedList.iterator();
         for (int indexRemovedArray = 0; iterator.hasNext(); indexRemovedArray++) {
@@ -329,31 +327,55 @@ public class SingleLinkedListTest {
 
     @Test
     public void addAll() throws Exception {
-        List<Integer> linkedList = new SingleLinkedList<>();
-        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertFalse(linkedList.addAll(new ArrayList<>()));
-        checkTwoList(linkedList, CHECK_ARRAY);
+        assertList(linkedList, CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(Arrays.asList(0, 9, 8, 7)));
-        checkTwoList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
     }
 
     @Test
     public void addAllIndex() throws Exception {
-        List<Integer> linkedList = new SingleLinkedList<>();
-        CHECK_ARRAY.stream().forEach(value -> linkedList.add(value));
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(0, new ArrayList<>()));
-        checkTwoList(linkedList, CHECK_ARRAY);
+        assertList(linkedList, CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(CHECK_ARRAY.size() - 1, Arrays.asList(0, 9, 8, 7)));
-        checkTwoList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
 
         assertTrue(linkedList.addAll(2, Arrays.asList(11, 12, 13, 14)));
-        checkTwoList(linkedList, Arrays.asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertList(linkedList, Arrays.asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6, 0, 9, 8, 7));
 
         thrown.expect(IndexOutOfBoundsException.class);
         assertTrue(linkedList.addAll(linkedList.size(), Arrays.asList(0, 9, 8, 7)));
+    }
+
+    @Test
+    public void removeAll() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        linkedList.removeAll(Collections.singletonList(5));
+        assertList(linkedList, Arrays.asList(4, 3, 2, 1, 6));
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        linkedList.removeAll(Collections.singletonList(6));
+        assertList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5));
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        linkedList.removeAll(Arrays.asList(4, 3, 1));
+        assertList(linkedList, Arrays.asList(5, 2, 5, 6));
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        linkedList.removeAll(CHECK_ARRAY);
+        assertList(linkedList, new ArrayList<>());
+    }
+
+    @Test
+    public void removeAllStandard() throws Exception {
+        List<Integer> intArrayList = new ArrayList<>(CHECK_ARRAY);
+        intArrayList.removeAll(Collections.singletonList(5));
+        assertList(intArrayList, Arrays.asList(4, 3, 2, 1, 6));
     }
 }

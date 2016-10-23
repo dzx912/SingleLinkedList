@@ -12,7 +12,13 @@ public class SingleLinkedList<T> implements List<T> {
     private int size;
 
     public SingleLinkedList() {
+        super();
         clear();
+    }
+
+    public SingleLinkedList(Collection<T> collections) {
+        this();
+        addAll(collections);
     }
 
     public int size() {
@@ -151,7 +157,7 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public boolean addAll(Collection<? extends T> collection) {
-        collection.stream().forEach(this::add);
+        collection.forEach(this::add);
         return !collection.isEmpty();
     }
 
@@ -165,8 +171,11 @@ public class SingleLinkedList<T> implements List<T> {
         return sizeAfter == sizeBefore + collection.size();
     }
 
-    public boolean removeAll(Collection<?> c) {
-        return false;
+    public boolean removeAll(Collection<?> collection) {
+        int sizeBefore = size();
+        collection.forEach(this::remove);
+        int sizeAfter = size();
+        return sizeBefore < sizeAfter;
     }
 
     public boolean retainAll(Collection<?> c) {
