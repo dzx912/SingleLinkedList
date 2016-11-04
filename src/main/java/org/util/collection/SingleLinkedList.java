@@ -1,6 +1,7 @@
 package org.util.collection;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Anton Lenok on 02.10.16.
@@ -206,4 +207,10 @@ public class SingleLinkedList<T> implements List<T> {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return this.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", ", "[", "]"));
+    }
 }

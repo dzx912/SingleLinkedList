@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -16,6 +17,8 @@ import static org.junit.Assert.*;
  * @since 21.10.16.
  */
 public class SingleLinkedListTest {
+
+    private static final Logger LOGGER = Logger.getLogger(SingleLinkedListTest.class.getName());
 
     private List<Integer> linkedListCommon;
     private final static List<Integer> CHECK_ARRAY = asList(5, 4, 3, 2, 1, 5, 6);
@@ -330,6 +333,9 @@ public class SingleLinkedListTest {
     }
 
     private void assertList(List<Integer> linkedList, List<Integer> checkArray) {
+        LOGGER.info("List for checking: " + linkedList);
+        LOGGER.info("Right list:        " + checkArray);
+//        LOGGER.info();
         assertEquals("Wrong size list", linkedList.size(), checkArray.size());
         Iterator<Integer> iterator = linkedList.iterator();
         int indexRemovedArray;
@@ -445,5 +451,24 @@ public class SingleLinkedListTest {
 
         linkedList.addAll(asList(2, 3, 4, 5));
         assertList(linkedList, asList(1, 2, 3, 4, 5));
+    }
+
+    @Test
+    public void subList() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertList(linkedList.subList(1, 3), asList(4, 3));
+    }
+
+    @Test
+    public void subListStandard() throws Exception {
+        List<Integer> linkedList = new ArrayList<>(CHECK_ARRAY);
+        assertList(linkedList.subList(1, 3), asList(4, 3));
+    }
+
+    @Test
+    public void testToString() throws Exception {
+        List<Integer> listStandard = new ArrayList<>(CHECK_ARRAY);
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertEquals(linkedList.toString(), listStandard.toString());
     }
 }
