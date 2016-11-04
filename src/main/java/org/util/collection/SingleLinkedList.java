@@ -80,6 +80,11 @@ public class SingleLinkedList<T> implements List<T> {
         ElementList<T> searchElement = search(index - 1);
         ElementList<T> removedElement = searchElement.getNext();
         searchElement.setNext(removedElement.getNext());
+
+        if (this.last == removedElement) {
+            this.last = searchElement;
+        }
+
         size -= 1;
         return removedElement.getValue();
     }
@@ -175,11 +180,18 @@ public class SingleLinkedList<T> implements List<T> {
         int sizeBefore = size();
         collection.forEach(this::remove);
         int sizeAfter = size();
-        return sizeBefore < sizeAfter;
+        return sizeAfter < sizeBefore;
     }
 
-    public boolean retainAll(Collection<?> c) {
-        return false;
+    public boolean retainAll(Collection<?> collection) {
+        int sizeBefore = size();
+
+        this.stream()
+                .filter(element -> !collection.contains(element))
+                .forEach(this::remove);
+
+        int sizeAfter = size();
+        return sizeAfter < sizeBefore;
     }
 
     public ListIterator<T> listIterator() {

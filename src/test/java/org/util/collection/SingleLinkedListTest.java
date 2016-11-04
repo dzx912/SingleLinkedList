@@ -8,6 +8,7 @@ import org.junit.rules.ExpectedException;
 import java.util.*;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
 /**
@@ -19,6 +20,7 @@ public class SingleLinkedListTest {
     private List<Integer> linkedListCommon;
     private final static List<Integer> CHECK_ARRAY = asList(5, 4, 3, 2, 1, 5, 6);
     private final static List<Integer> CHECK_ARRAY_BIGGER = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+    private final static List<Integer> EMPTY_LIST = Collections.emptyList();
 
 
     @Rule
@@ -106,7 +108,7 @@ public class SingleLinkedListTest {
         assertFalse(linkedListCommon.contains(7));
         assertFalse(linkedListCommon.contains(null));
 
-        assertFalse(linkedListCommon.contains(new ArrayList<>()));
+        assertFalse(linkedListCommon.contains(EMPTY_LIST));
     }
 
     @Test
@@ -121,7 +123,7 @@ public class SingleLinkedListTest {
         assertEquals(linkedListCommon.indexOf(6), 6);
         assertEquals(linkedListCommon.indexOf(7), -1);
 
-        assertEquals(linkedListCommon.indexOf(new ArrayList<>()), -1);
+        assertEquals(linkedListCommon.indexOf(EMPTY_LIST), -1);
     }
 
     @Test
@@ -131,7 +133,7 @@ public class SingleLinkedListTest {
         assertEquals(linkedListCommon.lastIndexOf(6), 6);
         assertEquals(linkedListCommon.lastIndexOf(7), -1);
 
-        assertEquals(linkedListCommon.lastIndexOf(new ArrayList<>()), -1);
+        assertEquals(linkedListCommon.lastIndexOf(EMPTY_LIST), -1);
     }
 
     @Test
@@ -188,8 +190,7 @@ public class SingleLinkedListTest {
 
     @Test
     public void toArraySameTypeStandard() throws Exception {
-        List<Integer> intArrayList = new ArrayList<>();
-        intArrayList.addAll(CHECK_ARRAY);
+        List<Integer> intArrayList = new ArrayList<>(CHECK_ARRAY);
         Integer[] firstEmptyArray = new Integer[0];
         assertEquals(firstEmptyArray.length, 0);
         Integer[] convertArrayEmpty = intArrayList.toArray(firstEmptyArray);
@@ -263,13 +264,30 @@ public class SingleLinkedListTest {
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(5));
-        assertList(linkedList, Collections.singletonList(3));
+        assertList(linkedList, singletonList(3));
 
         removed = linkedList.remove(0);
         assertEquals(removed, new Integer(3));
-        assertList(linkedList, new ArrayList<>());
+        assertList(linkedList, EMPTY_LIST);
 
         linkedList.remove(0);
+    }
+
+    @Test
+    public void removeAdd() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        linkedList.remove(linkedList.size() - 1);
+        assertList(linkedList, asList(5, 4, 3, 2, 1, 5));
+
+        linkedList.add(7);
+        assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 7));
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        linkedList.remove(0);
+        assertList(linkedList, asList(4, 3, 2, 1, 5, 6));
+
+        linkedList.add(7);
+        assertList(linkedList, asList(4, 3, 2, 1, 5, 6, 7));
     }
 
     @Test
@@ -304,20 +322,29 @@ public class SingleLinkedListTest {
 
         isRemoved = linkedList.remove(new Integer(1));
         assertEquals(isRemoved, true);
-        assertList(linkedList, Collections.singletonList(2));
+        assertList(linkedList, singletonList(2));
 
         isRemoved = linkedList.remove(new Integer(2));
         assertEquals(isRemoved, true);
-        assertList(linkedList, new ArrayList<>());
+        assertList(linkedList, EMPTY_LIST);
     }
 
     private void assertList(List<Integer> linkedList, List<Integer> checkArray) {
-        assertEquals(linkedList.size(), checkArray.size());
+        assertEquals("Wrong size list", linkedList.size(), checkArray.size());
         Iterator<Integer> iterator = linkedList.iterator();
-        for (int indexRemovedArray = 0; iterator.hasNext(); indexRemovedArray++) {
+        int indexRemovedArray;
+        for (indexRemovedArray = 0; iterator.hasNext(); indexRemovedArray++) {
             Integer element = iterator.next();
             assertEquals(element, checkArray.get(indexRemovedArray));
         }
+        assertEquals("Wrong real size list", indexRemovedArray, checkArray.size());
+    }
+
+    @Test
+    public void testAssertList() throws Exception {
+        assertList(new SingleLinkedList<>(asList(1, 2)), new SingleLinkedList<>(asList(1, 2)));
+
+        assertList(new SingleLinkedList<>(asList(2, 2)), new SingleLinkedList<>(asList(2, 2)));
     }
 
     @Test
@@ -330,7 +357,7 @@ public class SingleLinkedListTest {
     public void addAll() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        assertFalse(linkedList.addAll(new ArrayList<>()));
+        assertFalse(linkedList.addAll(EMPTY_LIST));
         assertList(linkedList, CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(asList(0, 9, 8, 7)));
@@ -341,7 +368,7 @@ public class SingleLinkedListTest {
     public void addAllIndex() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        assertTrue(linkedList.addAll(0, new ArrayList<>()));
+        assertTrue(linkedList.addAll(0, EMPTY_LIST));
         assertList(linkedList, CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(CHECK_ARRAY.size() - 1, asList(0, 9, 8, 7)));
@@ -357,26 +384,66 @@ public class SingleLinkedListTest {
     @Test
     public void removeAll() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        linkedList.removeAll(Collections.singletonList(5));
+        assertTrue(linkedList.removeAll(singletonList(5)));
         assertList(linkedList, asList(4, 3, 2, 1, 6));
 
         linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        linkedList.removeAll(Collections.singletonList(6));
+        assertTrue(linkedList.removeAll(singletonList(6)));
         assertList(linkedList, asList(5, 4, 3, 2, 1, 5));
 
         linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        linkedList.removeAll(asList(4, 3, 1));
+        assertTrue(linkedList.removeAll(asList(4, 3, 1)));
         assertList(linkedList, asList(5, 2, 5, 6));
 
         linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        linkedList.removeAll(CHECK_ARRAY);
-        assertList(linkedList, new ArrayList<>());
+        assertTrue(linkedList.removeAll(CHECK_ARRAY));
+        assertList(linkedList, EMPTY_LIST);
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertFalse(linkedList.removeAll(asList(0, 9, 8, 7)));
+        assertList(linkedList, CHECK_ARRAY);
     }
 
     @Test
     public void removeAllStandard() throws Exception {
         List<Integer> intArrayList = new ArrayList<>(CHECK_ARRAY);
-        intArrayList.removeAll(Collections.singletonList(5));
+        intArrayList.removeAll(singletonList(5));
         assertList(intArrayList, asList(4, 3, 2, 1, 6));
+    }
+
+    @Test
+    public void retainAll() throws Exception {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertTrue(linkedList.retainAll(asList(1, 2, 3, 5)));
+        assertList(linkedList, asList(5, 3, 2, 1, 5));
+
+        linkedList.addAll(asList(2, 3, 4, 5));
+        assertList(linkedList, asList(5, 3, 2, 1, 5, 2, 3, 4, 5));
+
+        linkedList.add(7);
+        assertList(linkedList, asList(5, 3, 2, 1, 5, 2, 3, 4, 5, 7));
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertFalse(linkedList.retainAll(CHECK_ARRAY));
+        assertList(linkedList, CHECK_ARRAY);
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertTrue(linkedList.retainAll(EMPTY_LIST));
+        assertList(linkedList, EMPTY_LIST);
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertTrue(linkedList.retainAll(asList(7, 8, 9, 10)));
+        assertList(linkedList, EMPTY_LIST);
+
+        linkedList.add(1);
+        linkedList.add(2);
+        assertList(linkedList, asList(1, 2));
+
+        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertTrue(linkedList.retainAll(asList(8, 1, 9, 10)));
+        assertList(linkedList, singletonList(1));
+
+        linkedList.addAll(asList(2, 3, 4, 5));
+        assertList(linkedList, asList(1, 2, 3, 4, 5));
     }
 }
