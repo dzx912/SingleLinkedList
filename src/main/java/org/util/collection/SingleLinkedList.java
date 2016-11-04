@@ -1,4 +1,4 @@
-package org.sberbank;
+package org.util.collection;
 
 import java.util.*;
 

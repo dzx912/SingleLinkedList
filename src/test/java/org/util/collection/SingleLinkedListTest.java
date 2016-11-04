@@ -1,4 +1,4 @@
-package org.sberbank;
+package org.util.collection;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -7,6 +7,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
 /**
@@ -16,8 +17,8 @@ import static org.junit.Assert.*;
 public class SingleLinkedListTest {
 
     private List<Integer> linkedListCommon;
-    private final static List<Integer> CHECK_ARRAY = Arrays.asList(5, 4, 3, 2, 1, 5, 6);
-    private final static List<Integer> CHECK_ARRAY_BIGGER = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+    private final static List<Integer> CHECK_ARRAY = asList(5, 4, 3, 2, 1, 5, 6);
+    private final static List<Integer> CHECK_ARRAY_BIGGER = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
 
 
     @Rule
@@ -240,25 +241,25 @@ public class SingleLinkedListTest {
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(4));
-        assertList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+        assertList(linkedList, asList(5, 3, 2, 1, 5, 6));
 
         removed = linkedList.remove(0);
         assertEquals(removed, new Integer(5));
-        assertList(linkedList, Arrays.asList(3, 2, 1, 5, 6));
+        assertList(linkedList, asList(3, 2, 1, 5, 6));
 
         removed = linkedList.remove(4);
         assertEquals(removed, new Integer(6));
-        assertList(linkedList, Arrays.asList(3, 2, 1, 5));
+        assertList(linkedList, asList(3, 2, 1, 5));
 
         linkedList.remove(7);
 
         removed = linkedList.remove(2);
         assertEquals(removed, new Integer(1));
-        assertList(linkedList, Arrays.asList(3, 2, 5));
+        assertList(linkedList, asList(3, 2, 5));
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(2));
-        assertList(linkedList, Arrays.asList(3, 5));
+        assertList(linkedList, asList(3, 5));
 
         removed = linkedList.remove(1);
         assertEquals(removed, new Integer(5));
@@ -279,27 +280,27 @@ public class SingleLinkedListTest {
 
         isRemoved = linkedList.remove(new Integer(4));
         assertEquals(isRemoved, true);
-        assertList(linkedList, Arrays.asList(5, 3, 2, 1, 5, 6));
+        assertList(linkedList, asList(5, 3, 2, 1, 5, 6));
 
         isRemoved = linkedList.remove(new Integer(5));
         assertEquals(isRemoved, true);
-        assertList(linkedList, Arrays.asList(3, 2, 1, 6));
+        assertList(linkedList, asList(3, 2, 1, 6));
 
         isRemoved = linkedList.remove(new Integer(6));
         assertEquals(isRemoved, true);
-        assertList(linkedList, Arrays.asList(3, 2, 1));
+        assertList(linkedList, asList(3, 2, 1));
 
         isRemoved = linkedList.remove(new Integer(5));
         assertEquals(isRemoved, false);
-        assertList(linkedList, Arrays.asList(3, 2, 1));
+        assertList(linkedList, asList(3, 2, 1));
 
         isRemoved = linkedList.remove("Wrong type");
         assertEquals(isRemoved, false);
-        assertList(linkedList, Arrays.asList(3, 2, 1));
+        assertList(linkedList, asList(3, 2, 1));
 
         isRemoved = linkedList.remove(new Integer(3));
         assertEquals(isRemoved, true);
-        assertList(linkedList, Arrays.asList(2, 1));
+        assertList(linkedList, asList(2, 1));
 
         isRemoved = linkedList.remove(new Integer(1));
         assertEquals(isRemoved, true);
@@ -321,8 +322,8 @@ public class SingleLinkedListTest {
 
     @Test
     public void containsAll() throws Exception {
-        assertTrue(linkedListCommon.containsAll(Arrays.asList(1, 2, 3)));
-        assertFalse(linkedListCommon.containsAll(Arrays.asList(1, 2, 3, 7)));
+        assertTrue(linkedListCommon.containsAll(asList(1, 2, 3)));
+        assertFalse(linkedListCommon.containsAll(asList(1, 2, 3, 7)));
     }
 
     @Test
@@ -332,8 +333,8 @@ public class SingleLinkedListTest {
         assertFalse(linkedList.addAll(new ArrayList<>()));
         assertList(linkedList, CHECK_ARRAY);
 
-        assertTrue(linkedList.addAll(Arrays.asList(0, 9, 8, 7)));
-        assertList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertTrue(linkedList.addAll(asList(0, 9, 8, 7)));
+        assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
     }
 
     @Test
@@ -343,29 +344,29 @@ public class SingleLinkedListTest {
         assertTrue(linkedList.addAll(0, new ArrayList<>()));
         assertList(linkedList, CHECK_ARRAY);
 
-        assertTrue(linkedList.addAll(CHECK_ARRAY.size() - 1, Arrays.asList(0, 9, 8, 7)));
-        assertList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertTrue(linkedList.addAll(CHECK_ARRAY.size() - 1, asList(0, 9, 8, 7)));
+        assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
 
-        assertTrue(linkedList.addAll(2, Arrays.asList(11, 12, 13, 14)));
-        assertList(linkedList, Arrays.asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertTrue(linkedList.addAll(2, asList(11, 12, 13, 14)));
+        assertList(linkedList, asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6, 0, 9, 8, 7));
 
         thrown.expect(IndexOutOfBoundsException.class);
-        assertTrue(linkedList.addAll(linkedList.size(), Arrays.asList(0, 9, 8, 7)));
+        assertTrue(linkedList.addAll(linkedList.size(), asList(0, 9, 8, 7)));
     }
 
     @Test
     public void removeAll() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         linkedList.removeAll(Collections.singletonList(5));
-        assertList(linkedList, Arrays.asList(4, 3, 2, 1, 6));
+        assertList(linkedList, asList(4, 3, 2, 1, 6));
 
         linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         linkedList.removeAll(Collections.singletonList(6));
-        assertList(linkedList, Arrays.asList(5, 4, 3, 2, 1, 5));
+        assertList(linkedList, asList(5, 4, 3, 2, 1, 5));
 
         linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        linkedList.removeAll(Arrays.asList(4, 3, 1));
-        assertList(linkedList, Arrays.asList(5, 2, 5, 6));
+        linkedList.removeAll(asList(4, 3, 1));
+        assertList(linkedList, asList(5, 2, 5, 6));
 
         linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         linkedList.removeAll(CHECK_ARRAY);
@@ -376,6 +377,6 @@ public class SingleLinkedListTest {
     public void removeAllStandard() throws Exception {
         List<Integer> intArrayList = new ArrayList<>(CHECK_ARRAY);
         intArrayList.removeAll(Collections.singletonList(5));
-        assertList(intArrayList, Arrays.asList(4, 3, 2, 1, 6));
+        assertList(intArrayList, asList(4, 3, 2, 1, 6));
     }
 }

@@ -1,7 +1,8 @@
-package org.sberbank;
+package org.util.collection;
 
 /**
  * Created by Anton Lenok on 02.10.16.
+ * Template single linked list's element
  */
 public class ElementList<T> {
     private ElementList<T> next;

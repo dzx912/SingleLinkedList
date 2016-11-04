@@ -1,9 +1,10 @@
-package org.sberbank;
+package org.util.collection;
 
 import java.util.Iterator;
 
 /**
  * Created by Anton Lenok on 02.10.16.
+ * Class iterator for functional like forEach with SingleLinkedList
  */
 public class SingleLinkedIterator<T> implements Iterator<T> {
 
