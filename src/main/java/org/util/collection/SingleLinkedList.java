@@ -17,6 +17,34 @@ public class SingleLinkedList<T> implements List<T> {
         clear();
     }
 
+    private SingleLinkedList(SingleLinkedList<T> linkedList, int fromIndex, int toIndex) {
+        //TODO: two type Exception: IllegalArgumentException and IndexOutOfBoundsException
+        boolean indexOutOfBounds = fromIndex < 0 || linkedList.size() < toIndex || toIndex < fromIndex;
+        if (indexOutOfBounds) {
+            throw new IllegalArgumentException();
+        }
+        ElementList<T> initElement = new ElementList<>();
+        ElementList<T> fromElement = linkedList.search(fromIndex);
+        initElement.setNext(fromElement);
+        this.first = initElement;
+        //TODO: find correct way get element and size
+        this.last = linkedList.search(toIndex - 1);
+
+        this.size = linkedList.distance(fromElement, this.last) + 1;
+    }
+
+    private int distance(ElementList<T> start, ElementList<T> end) {
+        ElementList<T> iteratorElement = start;
+        int counterIterator;
+        for (counterIterator = 0; iteratorElement != end; ++counterIterator) {
+            if (iteratorElement == null) {
+                throw new IndexOutOfBoundsException();
+            }
+            iteratorElement = iteratorElement.getNext();
+        }
+        return counterIterator;
+    }
+
     public SingleLinkedList(Collection<T> collections) {
         this();
         addAll(collections);
@@ -36,7 +64,7 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public Iterator<T> iterator() {
-        return new SingleLinkedIterator<>(first);
+        return new SingleLinkedIterator<>(first, last);
     }
 
     public boolean add(T value) {
@@ -73,6 +101,9 @@ public class SingleLinkedList<T> implements List<T> {
         ElementList<T> newElement = new ElementList<>(addElement);
         newElement.setNext(beforeElement.getNext());
         beforeElement.setNext(newElement);
+        if (this.last == beforeElement) {
+            this.last = newElement;
+        }
         this.size += 1;
         return newElement;
     }
@@ -204,7 +235,7 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+        return new SingleLinkedList<>(this, fromIndex, toIndex);
     }
 
     @Override

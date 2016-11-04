@@ -335,7 +335,6 @@ public class SingleLinkedListTest {
     private void assertList(List<Integer> linkedList, List<Integer> checkArray) {
         LOGGER.info("List for checking: " + linkedList);
         LOGGER.info("Right list:        " + checkArray);
-//        LOGGER.info();
         assertEquals("Wrong size list", linkedList.size(), checkArray.size());
         Iterator<Integer> iterator = linkedList.iterator();
         int indexRemovedArray;
@@ -456,13 +455,27 @@ public class SingleLinkedListTest {
     @Test
     public void subList() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertList(linkedList.subList(1, 3), asList(4, 3));
+        List<Integer> subList = linkedList.subList(1, 3);
+        assertList(subList, asList(4, 3));
     }
 
     @Test
     public void subListStandard() throws Exception {
         List<Integer> linkedList = new ArrayList<>(CHECK_ARRAY);
+        int size = linkedList.size();
+        assertList(linkedList.subList(0, size), CHECK_ARRAY);
+        assertList(linkedList.subList(1, 1), EMPTY_LIST);
         assertList(linkedList.subList(1, 3), asList(4, 3));
+        assertList(linkedList.subList(1, 2), singletonList(4));
+
+        assertList(linkedList.subList(size, size), EMPTY_LIST);
+
+        thrown.expect(IllegalArgumentException.class);
+        assertList(linkedList.subList(2, 1), EMPTY_LIST);
+
+        thrown.expect(IndexOutOfBoundsException.class);
+        assertList(linkedList.subList(0, size + 1), EMPTY_LIST);
+        assertList(linkedList.subList(-1, size), EMPTY_LIST);
     }
 
     @Test

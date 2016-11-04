@@ -9,13 +9,15 @@ import java.util.Iterator;
 public class SingleLinkedIterator<T> implements Iterator<T> {
 
     private ElementList<T> elementList;
+    private ElementList<T> last;
 
-    public SingleLinkedIterator(ElementList<T> elementList) {
+    public SingleLinkedIterator(ElementList<T> elementList, ElementList<T> last) {
         this.elementList = elementList;
+        this.last = last;
     }
 
     public boolean hasNext() {
-        return elementList.getNext() != null;
+        return elementList.getNext() != null && elementList != last;
     }
 
     public T next() {
