@@ -237,11 +237,11 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public ListIterator<T> listIterator() {
-        return null;
+        return new SingleLinkedIterator<>(first, last);
     }
 
     public ListIterator<T> listIterator(int index) {
-        return null;
+        return subList(index, size()).listIterator();
     }
 
     public List<T> subList(int fromIndex, int toIndex) {
