@@ -18,16 +18,26 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     private SingleLinkedList(SingleLinkedList<T> linkedList, int fromIndex, int toIndex) {
-        //TODO: two type Exception: IllegalArgumentException and IndexOutOfBoundsException
-        boolean indexOutOfBounds = fromIndex < 0 || linkedList.size() < toIndex || toIndex < fromIndex;
-        if (indexOutOfBounds) {
-            throw new IllegalArgumentException();
+        if (fromIndex < 0) {
+            throw new IllegalArgumentException("fromIndex = " + fromIndex);
+        }
+        if (linkedList.size() < toIndex) {
+            throw new IllegalArgumentException("toIndex = " + toIndex);
+        }
+
+        boolean illegalArgument = toIndex < fromIndex;
+        if (illegalArgument) {
+            throw new IllegalArgumentException("toIndex(" + toIndex + ") < fromIndex(" + fromIndex + ")");
+        }
+
+        if (fromIndex == toIndex) {
+            clear();
+            return;
         }
         ElementList<T> initElement = new ElementList<>();
         ElementList<T> fromElement = linkedList.search(fromIndex);
         initElement.setNext(fromElement);
         this.first = initElement;
-        //TODO: find correct way get element and size
         this.last = linkedList.search(toIndex - 1);
 
         this.size = linkedList.distance(fromElement, this.last) + 1;
