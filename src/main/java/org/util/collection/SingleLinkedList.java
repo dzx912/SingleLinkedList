@@ -74,7 +74,7 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public Iterator<T> iterator() {
-        return new SingleLinkedIterator<>(first, last);
+        return new SingleLinkedIterator<>(this, first, last);
     }
 
     public boolean add(T value) {
@@ -130,6 +130,11 @@ public class SingleLinkedList<T> implements List<T> {
         size -= 1;
         return removedElement.getValue();
     }
+
+    public void decreaseSize() {
+        size -= 1;
+    }
+
 
     public Object[] toArray() {
         Object[] outputArray = new Object[size()];
@@ -237,7 +242,7 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public ListIterator<T> listIterator() {
-        return new SingleLinkedIterator<>(first, last);
+        return new SingleLinkedIterator<>(this, first, last);
     }
 
     public ListIterator<T> listIterator(int index) {

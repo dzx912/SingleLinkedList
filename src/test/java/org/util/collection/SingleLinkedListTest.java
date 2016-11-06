@@ -334,7 +334,7 @@ public class SingleLinkedListTest {
 
     private void assertList(List<Integer> linkedList, List<Integer> checkArray) {
         LOGGER.info("List for checking: " + linkedList);
-        LOGGER.info("Right list:        " + checkArray);
+        LOGGER.info("Right list:        " + checkArray + "\n");
         assertEquals("Wrong size list", linkedList.size(), checkArray.size());
         Iterator<Integer> iterator = linkedList.iterator();
         int indexRemovedArray;
@@ -497,13 +497,104 @@ public class SingleLinkedListTest {
         assertEquals(linkedList.toString(), listStandard.toString());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void listIteratorSetIllegalState() throws Exception {
+        new SingleLinkedList<>(CHECK_ARRAY).listIterator().set(1);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void listIteratorSetIllegalStateStandard() throws Exception {
+        new ArrayList<>(CHECK_ARRAY).listIterator().set(1);
+    }
+
     @Test
     public void listIterator() throws Exception {
-
+        listIterator(new SingleLinkedList<>(CHECK_ARRAY));
     }
 
     @Test
     public void listIteratorStandard() throws Exception {
+        listIterator(new ArrayList<>(CHECK_ARRAY));
+    }
 
+    private void listIterator(List<Integer> linkedList) {
+        ListIterator<Integer> listIterator = linkedList.listIterator();
+
+        ListIterator<Integer> integerListIterator = linkedList.listIterator();
+        ListIterator<Integer> integerListIteratorCheck = CHECK_ARRAY.listIterator();
+
+        while(integerListIterator.hasNext()){
+            assertEquals(integerListIterator.hasNext(), integerListIteratorCheck.hasNext());
+            assertEquals(integerListIterator.hasPrevious(), integerListIteratorCheck.hasPrevious());
+            assertEquals(integerListIterator.nextIndex(), integerListIteratorCheck.nextIndex());
+            assertEquals(integerListIterator.previousIndex(), integerListIteratorCheck.previousIndex());
+
+            assertEquals(integerListIterator.next(), integerListIteratorCheck.next());
+        }
+
+        assertEquals(integerListIterator.hasNext(), integerListIteratorCheck.hasNext());
+
+        while(integerListIterator.hasPrevious()){
+            assertEquals(integerListIterator.hasNext(), integerListIteratorCheck.hasNext());
+            assertEquals(integerListIterator.hasPrevious(), integerListIteratorCheck.hasPrevious());
+            assertEquals(integerListIterator.nextIndex(), integerListIteratorCheck.nextIndex());
+            assertEquals(integerListIterator.previousIndex(), integerListIteratorCheck.previousIndex());
+
+            assertEquals(integerListIterator.previous(), integerListIteratorCheck.previous());
+        }
+
+        assertTrue(listIterator.hasNext());
+        assertFalse(listIterator.hasPrevious());
+        assertEquals(listIterator.nextIndex(), 0);
+        assertEquals(listIterator.previousIndex(), -1);
+
+        assertTrue(listIterator.next() == 5);
+
+        assertEquals(listIterator.nextIndex(), 1);
+        assertEquals(listIterator.nextIndex(), 1);
+        assertEquals(listIterator.previousIndex(), 0);
+        assertEquals(listIterator.previousIndex(), 0);
+
+        listIterator.set(7);
+        assertList(linkedList, asList(7, 4, 3, 2, 1, 5, 6));
+
+        assertTrue(listIterator.hasNext());
+        assertTrue(listIterator.hasPrevious());
+        assertTrue(listIterator.next() == 4);
+        assertEquals(listIterator.nextIndex(), 2);
+
+        listIterator.set(8);
+        assertList(linkedList, asList(7, 8, 3, 2, 1, 5, 6));
+
+        listIterator.remove();
+        assertList(linkedList, asList(7, 3, 2, 1, 5, 6));
+
+        assertTrue(listIterator.hasNext());
+        assertTrue(listIterator.hasPrevious());
+        assertEquals(listIterator.nextIndex(), 1);
+        assertEquals(listIterator.previousIndex(), 0);
+        assertTrue(listIterator.next() == 3);
+
+        listIterator.remove();
+        assertList(linkedList, asList(7, 2, 1, 5, 6));
+
+        assertTrue(listIterator.hasNext());
+        assertTrue(listIterator.hasPrevious());
+        assertEquals(listIterator.previous(), new Integer(7));
+        assertFalse(listIterator.hasPrevious());
+
+        listIterator.set(9);
+        assertList(linkedList, asList(9, 2, 1, 5, 6));
+
+        listIterator.remove();
+        assertList(linkedList, asList(2, 1, 5, 6));
+
+        listIterator.add(10);
+        assertList(linkedList, asList(10, 2, 1, 5, 6));
+
+        assertTrue(listIterator.hasNext());
+        assertTrue(listIterator.hasPrevious());
+        assertEquals(listIterator.nextIndex(), 1);
+        assertEquals(listIterator.previousIndex(), 0);
     }
 }
