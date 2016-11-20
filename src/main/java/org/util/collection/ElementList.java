@@ -32,4 +32,9 @@ public class ElementList<T> {
     public void setValue(T value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "{" + value + '}';
+    }
 }
