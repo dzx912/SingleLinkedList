@@ -12,6 +12,8 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
     private ElementList<T> elementList;
     private ElementList<T> last;
     private int index;
+    private boolean hasPrevious;
+    private boolean hasNext;
 
     private SingleLinkedList<T> linkedList;
 
@@ -21,33 +23,41 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
         this.elementList = elementList;
         this.last = last;
         this.index = 0;
+
+        this.hasPrevious = false;
+        this.hasNext = first != last;
     }
 
     public boolean hasNext() {
-        return elementList.getNext() != null && elementList != last;
+        return hasNext;
     }
 
     public T next() {
         this.index += 1;
         elementList = elementList.getNext();
+        hasPrevious = true;
+        hasNext = elementList.getNext() != null && elementList != last;
         return elementList.getValue();
     }
 
     @Override
     public boolean hasPrevious() {
-        return 0 < index;
+        return hasPrevious;
     }
 
     @Override
     public T previous() {
         movePrevious();
+        hasPrevious = first.getNext() != elementList;
+        hasNext = true;
         return elementList.getValue();
     }
 
     private void movePrevious() {
         index -= 1;
+
         elementList = first;
-        for (int indexElement = 0; indexElement < index; ++indexElement) {
+        for (int indexElement = 0; indexElement <= index; ++indexElement) {
             elementList = elementList.getNext();
         }
     }
@@ -64,13 +74,22 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
 
     @Override
     public void remove() {
-        ElementList<T> removedElement = this.elementList;
-        if (first != this.elementList) {
-            movePrevious();
-            this.elementList.setNext(removedElement.getNext());
+        ElementList<T> removedElement = elementList;
+        if (first.getNext() != elementList) {
+            index -= 1;
+        } else {
+            hasPrevious = false;
         }
+
+        elementList = first;
+        while (elementList.getNext() != removedElement) {
+            elementList = elementList.getNext();
+        }
+
+        elementList.setNext(removedElement.getNext());
         if (last == removedElement) {
             last = elementList;
+            hasNext = false;
         }
 
         linkedList.decreaseSize();
@@ -78,7 +97,7 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
 
     @Override
     public void set(T element) {
-        if (index == 0) {
+        if (first == elementList) {
             throw new IllegalStateException();
         }
         elementList.setValue(element);
@@ -86,9 +105,25 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
 
     @Override
     public void add(T element) {
-        ElementList<T> nextElement = this.elementList.getNext();
+        ElementList<T> nextElement = elementList.getNext();
         ElementList<T> newElement = new ElementList<>(element);
-        this.elementList.setNext(nextElement);
+        elementList.setNext(newElement);
         newElement.setNext(nextElement);
+        elementList = newElement;
+        index += 1;
+        linkedList.increaseSize();
+        hasPrevious = true;
+        hasNext = elementList.getNext() != null && elementList != last;
+    }
+
+    @Override
+    public String toString() {
+        return "SingleLinkedIterator{" +
+                "index=" + index +
+                ", elementList=" + elementList +
+                ", linkedList=" + linkedList +
+                ", first=" + first +
+                ", last=" + last +
+                '}';
     }
 }

@@ -522,29 +522,33 @@ public class SingleLinkedListTest {
         LOGGER.info("List for checking: " + linkedList);
         LOGGER.info("Right list:        " + CHECK_ARRAY + "\n");
 
+        for (int indexCheckingIterator = 0; indexCheckingIterator < linkedList.size(); ++indexCheckingIterator) {
+            ListIterator<Integer> integerListIterator = linkedList.listIterator();
+            ListIterator<Integer> integerListIteratorCheck = CHECK_ARRAY.listIterator();
+            int currentIndexIterator = 0;
+            while (integerListIterator.hasNext() && currentIndexIterator <= indexCheckingIterator) {
+                ++currentIndexIterator;
+                checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
+
+                Integer next = integerListIterator.next();
+                LOGGER.info("Next:     " + next);
+                assertEquals(next, integerListIteratorCheck.next());
+            }
+            LOGGER.info("-------------");
+
+            checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
+
+            while (integerListIterator.hasPrevious()) {
+                checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
+
+                Integer previous = integerListIterator.previous();
+                LOGGER.info("Previous: " + previous);
+                assertEquals(previous, integerListIteratorCheck.previous());
+            }
+            LOGGER.info("=============\n");
+        }
+
         ListIterator<Integer> listIterator = linkedList.listIterator();
-
-        ListIterator<Integer> integerListIterator = linkedList.listIterator();
-        ListIterator<Integer> integerListIteratorCheck = CHECK_ARRAY.listIterator();
-
-        while(integerListIterator.hasNext()){
-            checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
-
-            Integer next = integerListIterator.next();
-            LOGGER.info("Next:     " + next);
-            assertEquals(next, integerListIteratorCheck.next());
-        }
-        LOGGER.info("-------------");
-
-        checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
-
-        while(integerListIterator.hasPrevious()){
-            checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
-
-            Integer previous = integerListIterator.previous();
-            LOGGER.info("Previous: " + previous);
-            assertEquals(previous, integerListIteratorCheck.previous());
-        }
 
         assertTrue(listIterator.hasNext());
         assertFalse(listIterator.hasPrevious());
@@ -583,14 +587,30 @@ public class SingleLinkedListTest {
 
         assertTrue(listIterator.hasNext());
         assertTrue(listIterator.hasPrevious());
+        assertEquals(listIterator.nextIndex(), 1);
+        assertEquals(listIterator.previousIndex(), 0);
+
         assertEquals(listIterator.previous(), new Integer(7));
+
+        assertEquals(listIterator.nextIndex(), 0);
+        assertEquals(listIterator.previousIndex(), -1);
         assertFalse(listIterator.hasPrevious());
 
         listIterator.set(9);
         assertList(linkedList, asList(9, 2, 1, 5, 6));
 
+        assertTrue(listIterator.hasNext());
+        assertFalse(listIterator.hasPrevious());
+        assertEquals(listIterator.nextIndex(), 0);
+        assertEquals(listIterator.previousIndex(), -1);
+
         listIterator.remove();
         assertList(linkedList, asList(2, 1, 5, 6));
+
+        assertTrue(listIterator.hasNext());
+        assertFalse(listIterator.hasPrevious());
+        assertEquals(listIterator.nextIndex(), 0);
+        assertEquals(listIterator.previousIndex(), -1);
 
         listIterator.add(10);
         assertList(linkedList, asList(10, 2, 1, 5, 6));
@@ -599,12 +619,18 @@ public class SingleLinkedListTest {
         assertTrue(listIterator.hasPrevious());
         assertEquals(listIterator.nextIndex(), 1);
         assertEquals(listIterator.previousIndex(), 0);
+
+        assertEquals(listIterator.previous(), new Integer(10));
+
+        assertEquals(listIterator.nextIndex(), 0);
+        assertEquals(listIterator.previousIndex(), -1);
+        assertFalse(listIterator.hasPrevious());
     }
 
     private void checkSettingsListIrerators(ListIterator<Integer> integerListIterator, ListIterator<Integer> integerListIteratorCheck) {
-        assertEquals(integerListIterator.hasNext(), integerListIteratorCheck.hasNext());
-        assertEquals(integerListIterator.hasPrevious(), integerListIteratorCheck.hasPrevious());
-        assertEquals(integerListIterator.nextIndex(), integerListIteratorCheck.nextIndex());
-        assertEquals(integerListIterator.previousIndex(), integerListIteratorCheck.previousIndex());
+        assertEquals("Wrong hasNext", integerListIterator.hasNext(), integerListIteratorCheck.hasNext());
+        assertEquals("Wrong hasPrevious", integerListIterator.hasPrevious(), integerListIteratorCheck.hasPrevious());
+        assertEquals("Wrong nextIndex", integerListIterator.nextIndex(), integerListIteratorCheck.nextIndex());
+        assertEquals("Wrong previousIndex", integerListIterator.previousIndex(), integerListIteratorCheck.previousIndex());
     }
 }

@@ -135,6 +135,10 @@ public class SingleLinkedList<T> implements List<T> {
         size -= 1;
     }
 
+    public void increaseSize() {
+        size += 1;
+    }
+
 
     public Object[] toArray() {
         Object[] outputArray = new Object[size()];
