@@ -12,8 +12,8 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
     private ElementList<T> elementList;
     private ElementList<T> last;
     private int index;
-    private boolean hasPrevious;
-    private boolean hasNext;
+
+    private OrderIterator orderIterator;
 
     private SingleLinkedList<T> linkedList;
 
@@ -24,32 +24,29 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
         this.last = last;
         this.index = 0;
 
-        this.hasPrevious = false;
-        this.hasNext = first != last;
+        this.orderIterator = OrderIterator.straight;
     }
 
     public boolean hasNext() {
-        return hasNext;
+        return elementList != last || orderIterator != OrderIterator.straight;
     }
 
     public T next() {
         this.index += 1;
         elementList = elementList.getNext();
-        hasPrevious = true;
-        hasNext = elementList.getNext() != null && elementList != last;
+        orderIterator = OrderIterator.straight;
         return elementList.getValue();
     }
 
     @Override
     public boolean hasPrevious() {
-        return hasPrevious;
+        return 0 < index;
     }
 
     @Override
     public T previous() {
         movePrevious();
-        hasPrevious = first.getNext() != elementList;
-        hasNext = true;
+        orderIterator = OrderIterator.revers;
         return elementList.getValue();
     }
 
@@ -75,21 +72,16 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
     @Override
     public void remove() {
         ElementList<T> removedElement = elementList;
-        if (first.getNext() != elementList) {
-            index -= 1;
-        } else {
-            hasPrevious = false;
-        }
-
         elementList = first;
+        index = 0;
         while (elementList.getNext() != removedElement) {
+            ++index;
             elementList = elementList.getNext();
         }
 
         elementList.setNext(removedElement.getNext());
         if (last == removedElement) {
             last = elementList;
-            hasNext = false;
         }
 
         linkedList.decreaseSize();
@@ -112,8 +104,6 @@ public class SingleLinkedIterator<T> implements ListIterator<T> {
         elementList = newElement;
         index += 1;
         linkedList.increaseSize();
-        hasPrevious = true;
-        hasNext = elementList.getNext() != null && elementList != last;
     }
 
     @Override

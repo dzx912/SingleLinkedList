@@ -528,7 +528,7 @@ public class SingleLinkedListTest {
             int currentIndexIterator = 0;
             while (integerListIterator.hasNext() && currentIndexIterator <= indexCheckingIterator) {
                 ++currentIndexIterator;
-                checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
+                checkSettingsListIterators(integerListIterator, integerListIteratorCheck);
 
                 Integer next = integerListIterator.next();
                 LOGGER.info("Next:     " + next);
@@ -536,10 +536,10 @@ public class SingleLinkedListTest {
             }
             LOGGER.info("-------------");
 
-            checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
+            checkSettingsListIterators(integerListIterator, integerListIteratorCheck);
 
             while (integerListIterator.hasPrevious()) {
-                checkSettingsListIrerators(integerListIterator, integerListIteratorCheck);
+                checkSettingsListIterators(integerListIterator, integerListIteratorCheck);
 
                 Integer previous = integerListIterator.previous();
                 LOGGER.info("Previous: " + previous);
@@ -627,7 +627,7 @@ public class SingleLinkedListTest {
         assertFalse(listIterator.hasPrevious());
     }
 
-    private void checkSettingsListIrerators(ListIterator<Integer> integerListIterator, ListIterator<Integer> integerListIteratorCheck) {
+    private void checkSettingsListIterators(ListIterator<Integer> integerListIterator, ListIterator<Integer> integerListIteratorCheck) {
         assertEquals("Wrong hasNext", integerListIterator.hasNext(), integerListIteratorCheck.hasNext());
         assertEquals("Wrong hasPrevious", integerListIterator.hasPrevious(), integerListIteratorCheck.hasPrevious());
         assertEquals("Wrong nextIndex", integerListIterator.nextIndex(), integerListIteratorCheck.nextIndex());
