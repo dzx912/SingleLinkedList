@@ -7,10 +7,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
+import java.util.function.IntUnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -325,6 +325,28 @@ public class SingleLinkedListTest {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         for (int index = CHECK_ARRAY.size() - 1; 0 <= index; index--) {
+            linkedList.remove(index);
+        }
+
+        assertList(linkedList, EMPTY_LIST);
+    }
+
+    @Test
+    public void afterRemoveAllElementsByRandomOrderShouldBeEmptyList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        IntUnaryOperator reverseIndex = index -> linkedList.size() - index;
+        Random random = new Random();
+        List<Integer> randomIndices = IntStream.range(0, linkedList.size())
+                .map(reverseIndex)
+                .map(random::nextInt)
+                .boxed()
+                .collect(Collectors.toList());
+
+        LOGGER.info("Random indices: " + randomIndices);
+
+        for (int index : randomIndices) {
+            LOGGER.info("Remove index: " + index);
             linkedList.remove(index);
         }
 
