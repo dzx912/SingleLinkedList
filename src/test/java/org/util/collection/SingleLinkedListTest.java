@@ -287,6 +287,13 @@ public class SingleLinkedListTest {
         linkedList.remove(0);
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void removeTooBiggerIndexShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.remove(linkedList.size());
+    }
+
     @Test
     public void afterRemoveElementShouldCutList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);

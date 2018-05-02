@@ -121,6 +121,9 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public T remove(int index) {
+        if (size <= index) {
+            throw new IndexOutOfBoundsException(String.format("Too much index: %d", index));
+        }
         ElementList<T> searchElement = search(index - 1);
         ElementList<T> removedElement = searchElement.getNext();
         searchElement.setNext(removedElement.getNext());
