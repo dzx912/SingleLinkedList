@@ -304,8 +304,8 @@ public class SingleLinkedListTest {
         linkedList.remove(1);
         Integer removed = linkedList.remove(0);
 
-        assertEquals(removed, new Integer(5));
-        assertList(linkedList, asList(3, 2, 1, 5, 6));
+        assertEquals(new Integer(5), removed);
+        assertList(asList(3, 2, 1, 5, 6), linkedList);
     }
 
     @Test
@@ -317,7 +317,7 @@ public class SingleLinkedListTest {
         Integer removed = linkedList.remove(4);
 
         assertEquals(new Integer(6), removed);
-        assertList(linkedList, asList(3, 2, 1, 5));
+        assertList(asList(3, 2, 1, 5), linkedList);
     }
 
     @Test
@@ -382,7 +382,7 @@ public class SingleLinkedListTest {
         linkedList.remove(linkedList.size() - 1);
         linkedList.add(7);
 
-        assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 7));
+        assertList(asList(5, 4, 3, 2, 1, 5, 7), linkedList);
     }
 
     @Test
@@ -392,7 +392,7 @@ public class SingleLinkedListTest {
         linkedList.remove(0);
         linkedList.add(7);
 
-        assertList(linkedList, asList(4, 3, 2, 1, 5, 6, 7));
+        assertList(asList(4, 3, 2, 1, 5, 6, 7), linkedList);
     }
 
     @Test
