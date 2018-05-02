@@ -14,17 +14,16 @@ import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
 /**
- * @author Anton Lenok
- * @since 21.10.16.
+ * Unit tests for SingleLinkedList
  */
 public class SingleLinkedListTest {
 
     private static final Logger LOGGER = LogManager.getLogger(SingleLinkedListTest.class);
 
     private List<Integer> linkedListCommon;
-    private final static List<Integer> CHECK_ARRAY = asList(5, 4, 3, 2, 1, 5, 6);
-    private final static List<Integer> CHECK_ARRAY_BIGGER = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-    private final static List<Integer> EMPTY_LIST = Collections.emptyList();
+    private static final List<Integer> CHECK_ARRAY = asList(5, 4, 3, 2, 1, 5, 6);
+    private static final List<Integer> CHECK_ARRAY_BIGGER = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+    private static final List<Integer> EMPTY_LIST = Collections.emptyList();
 
 
     @Rule
@@ -36,114 +35,173 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void size() throws Exception {
+    public void afterCreateShouldBeEmpty() {
         List<Integer> linkedList = new SingleLinkedList<>();
         assertTrue(linkedList.isEmpty());
         assertEquals(linkedList.size(), 0);
+    }
 
+    @Test
+    public void afterAddShouldBeNotEmpty() {
+        List<Integer> linkedList = new SingleLinkedList<>();
         linkedList.add(1);
-        assertFalse(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 1);
 
-        linkedList.add(1);
-        assertFalse(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 2);
-
-        linkedList.add(1);
-        assertFalse(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 3);
-
-        linkedList.clear();
-        assertTrue(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 0);
-
-        linkedList.add(1);
         assertFalse(linkedList.isEmpty());
         assertEquals(linkedList.size(), 1);
     }
 
     @Test
-    public void get() throws Exception {
-        assertEquals(linkedListCommon.get(5), new Integer(5));
-        assertEquals(linkedListCommon.get(4), new Integer(1));
-        assertEquals(linkedListCommon.get(3), new Integer(2));
-        assertEquals(linkedListCommon.get(2), new Integer(3));
-        assertEquals(linkedListCommon.get(1), new Integer(4));
-        assertEquals(linkedListCommon.get(0), new Integer(5));
+    public void afterDoubleAddShouldBeNotEmpty() {
+        List<Integer> linkedList = new SingleLinkedList<>();
+        linkedList.add(1);
+        linkedList.add(1);
+
+        assertFalse(linkedList.isEmpty());
+        assertEquals(linkedList.size(), 2);
+    }
+
+    @Test
+    public void afterCreateAndClearShouldBeEmpty() {
+        List<Integer> linkedList = new SingleLinkedList<>();
+
+        linkedList.clear();
+
+        assertTrue(linkedList.isEmpty());
+        assertEquals(linkedList.size(), 0);
+    }
+
+    @Test
+    public void afterAddAndClearShouldBeEmpty() {
+        List<Integer> linkedList = new SingleLinkedList<>();
+
+        linkedList.add(1);
+        linkedList.clear();
+
+        assertTrue(linkedList.isEmpty());
+        assertEquals(linkedList.size(), 0);
+    }
+
+    @Test
+    public void afterInitShouldGetCorrectValue() {
+        assertEquals(linkedListCommon.get(5), CHECK_ARRAY.get(5));
+        assertEquals(linkedListCommon.get(4), CHECK_ARRAY.get(4));
+        assertEquals(linkedListCommon.get(3), CHECK_ARRAY.get(3));
+        assertEquals(linkedListCommon.get(2), CHECK_ARRAY.get(2));
+        assertEquals(linkedListCommon.get(1), CHECK_ARRAY.get(1));
+        assertEquals(linkedListCommon.get(0), CHECK_ARRAY.get(0));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testIndexOutOfBoundsException() {
+    public void withoutInitGetShouldThrowException() {
         new SingleLinkedList<>().get(0);
     }
 
-    @Test
-    public void testOutOfBounds() throws Exception {
-        thrown.expect(IndexOutOfBoundsException.class);
-
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void tooManyIndexShouldThrowException() {
         linkedListCommon.get(7);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void tooLittleIndexShouldThrowException() {
         linkedListCommon.get(-1);
     }
 
     @Test
-    public void testSet() throws Exception {
+    public void afterFirstSetShouldCorrectValue() {
+        List<Integer> linkedList = initListWithThreeElement();
+
+        linkedList.set(0, 6);
+        assertEquals(linkedList.get(0), new Integer(6));
+    }
+
+    @Test
+    public void afterSecondSetShouldCorrectValue() {
+        List<Integer> linkedList = initListWithThreeElement();
+
+        linkedList.set(2, 7);
+        assertEquals(linkedList.get(2), new Integer(7));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void afterSetTooManyIndexShouldThrowException() {
+        List<Integer> linkedList = initListWithThreeElement();
+
+        linkedList.set(3, 7);
+    }
+
+    private List<Integer> initListWithThreeElement() {
         List<Integer> linkedList = new SingleLinkedList<>();
         linkedList.add(1);
         linkedList.add(2);
         linkedList.add(3);
-
-        assertEquals(linkedList.get(0), new Integer(1));
-        linkedList.set(0, 6);
-        assertEquals(linkedList.get(0), new Integer(6));
-
-        assertEquals(linkedList.get(2), new Integer(3));
-        linkedList.set(2, 7);
-        assertEquals(linkedList.get(2), new Integer(7));
-
-        thrown.expect(IndexOutOfBoundsException.class);
-        linkedList.set(3, 7);
+        return linkedList;
     }
 
     @Test
-    public void contains() throws Exception {
-        assertTrue(linkedListCommon.contains(5));
-        assertTrue(linkedListCommon.contains(1));
-        assertTrue(linkedListCommon.contains(6));
-        assertFalse(linkedListCommon.contains(7));
-        assertFalse(linkedListCommon.contains(null));
+    public void containsShouldReturnTrue() {
+        for (Integer value : CHECK_ARRAY) {
+            assertTrue(linkedListCommon.contains(value));
+        }
+    }
 
+    @Test
+    public void containsWithUnknownValueShouldReturnFalse() {
+        assertFalse(linkedListCommon.contains(7));
+    }
+
+    @Test
+    public void containsWithNullShouldReturnFalse() {
+        assertFalse(linkedListCommon.contains(null));
+    }
+
+    @Test
+    public void containsWithEmptyListShouldReturnFalse() {
         assertFalse(linkedListCommon.contains(EMPTY_LIST));
     }
 
     @Test
-    public void containsStandard() throws Exception {
-        assertFalse(CHECK_ARRAY.contains(null));
-    }
-
-    @Test
-    public void indexOf() throws Exception {
+    public void indexOfWithCorrectValueShouldFound() {
         assertEquals(linkedListCommon.indexOf(5), 0);
         assertEquals(linkedListCommon.indexOf(1), 4);
         assertEquals(linkedListCommon.indexOf(6), 6);
-        assertEquals(linkedListCommon.indexOf(7), -1);
+    }
 
+    @Test
+    public void indexOfWithUnknownValueShouldNotFound() {
+        assertEquals(linkedListCommon.indexOf(7), -1);
+    }
+
+    @Test
+    public void indexOfWithEmptyListValueShouldNotFound() {
         assertEquals(linkedListCommon.indexOf(EMPTY_LIST), -1);
     }
 
     @Test
-    public void lastIndexOf() throws Exception {
+    public void lastIndexOfWithCorrectValueShouldFound() {
         assertEquals(linkedListCommon.lastIndexOf(1), 4);
         assertEquals(linkedListCommon.lastIndexOf(5), 5);
         assertEquals(linkedListCommon.lastIndexOf(6), 6);
-        assertEquals(linkedListCommon.lastIndexOf(7), -1);
+    }
 
+    @Test
+    public void lastIndexOfWithUnknownValueShouldNotFound() {
+        assertEquals(linkedListCommon.lastIndexOf(7), -1);
+    }
+
+    @Test
+    public void lastIndexOfWithEmptyListValueShouldNotFound() {
         assertEquals(linkedListCommon.lastIndexOf(EMPTY_LIST), -1);
     }
 
     @Test
-    public void toArray() throws Exception {
+    public void toArrayShouldReturnCorrectSize() {
         Object[] convertArray = linkedListCommon.toArray();
         assertEquals(convertArray.length, CHECK_ARRAY.size());
+    }
+
+    @Test
+    public void toArrayShouldReturnCorrectArray() {
+        Object[] convertArray = linkedListCommon.toArray();
         for (int indexConvertArray = 0; indexConvertArray < convertArray.length; indexConvertArray++) {
             assertTrue(convertArray[indexConvertArray] instanceof Integer);
             assertEquals(convertArray[indexConvertArray].getClass(), Integer.class);

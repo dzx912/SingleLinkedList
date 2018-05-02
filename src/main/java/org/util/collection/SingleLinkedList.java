@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Created by Anton Lenok on 02.10.16.
  * Class for training implementation single linked list
  */
 public class SingleLinkedList<T> implements List<T> {
@@ -19,15 +18,15 @@ public class SingleLinkedList<T> implements List<T> {
 
     private SingleLinkedList(SingleLinkedList<T> linkedList, int fromIndex, int toIndex) {
         if (fromIndex < 0) {
-            throw new IllegalArgumentException("fromIndex = " + fromIndex);
+            throw new IllegalArgumentException(String.format("fromIndex = %d", fromIndex));
         }
         if (linkedList.size() < toIndex) {
-            throw new IllegalArgumentException("toIndex = " + toIndex);
+            throw new IllegalArgumentException(String.format("toIndex = %d", toIndex));
         }
 
         boolean illegalArgument = toIndex < fromIndex;
         if (illegalArgument) {
-            throw new IllegalArgumentException("toIndex(" + toIndex + ") < fromIndex(" + fromIndex + ")");
+            throw new IllegalArgumentException(String.format("toIndex(%d) < fromIndex(%d)", toIndex, fromIndex));
         }
 
         if (fromIndex == toIndex) {
@@ -94,6 +93,9 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public T get(int index) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException(String.format("Too little index: %d", index));
+        }
         return search(index).getValue();
     }
 
@@ -175,13 +177,13 @@ public class SingleLinkedList<T> implements List<T> {
 
     private ElementList<T> search(int indexSearch) {
         if (isEmpty()) {
-            throw new IndexOutOfBoundsException("Doesn't have any elements");
+            throw new IndexOutOfBoundsException(String.format("Doesn't have any elements: %d", indexSearch));
         }
         ElementList<T> currentElement = this.first;
         for (int indexElement = 0; indexElement <= indexSearch; ++indexElement) {
             currentElement = currentElement.getNext();
             if (currentElement == null) {
-                throw new IndexOutOfBoundsException("Too much index");
+                throw new IndexOutOfBoundsException(String.format("Too much index: %d", indexSearch));
             }
         }
         return currentElement;
