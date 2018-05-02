@@ -7,7 +7,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -38,7 +41,7 @@ public class SingleLinkedListTest {
     public void afterCreateShouldBeEmpty() {
         List<Integer> linkedList = new SingleLinkedList<>();
         assertTrue(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 0);
+        assertEquals(0, linkedList.size());
     }
 
     @Test
@@ -47,7 +50,7 @@ public class SingleLinkedListTest {
         linkedList.add(1);
 
         assertFalse(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 1);
+        assertEquals(1, linkedList.size());
     }
 
     @Test
@@ -57,7 +60,7 @@ public class SingleLinkedListTest {
         linkedList.add(1);
 
         assertFalse(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 2);
+        assertEquals(2, linkedList.size());
     }
 
     @Test
@@ -67,7 +70,7 @@ public class SingleLinkedListTest {
         linkedList.clear();
 
         assertTrue(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 0);
+        assertEquals(0, linkedList.size());
     }
 
     @Test
@@ -78,17 +81,17 @@ public class SingleLinkedListTest {
         linkedList.clear();
 
         assertTrue(linkedList.isEmpty());
-        assertEquals(linkedList.size(), 0);
+        assertEquals(0, linkedList.size());
     }
 
     @Test
     public void afterInitShouldGetCorrectValue() {
-        assertEquals(linkedListCommon.get(5), CHECK_ARRAY.get(5));
-        assertEquals(linkedListCommon.get(4), CHECK_ARRAY.get(4));
-        assertEquals(linkedListCommon.get(3), CHECK_ARRAY.get(3));
-        assertEquals(linkedListCommon.get(2), CHECK_ARRAY.get(2));
-        assertEquals(linkedListCommon.get(1), CHECK_ARRAY.get(1));
-        assertEquals(linkedListCommon.get(0), CHECK_ARRAY.get(0));
+        assertEquals(CHECK_ARRAY.get(5), linkedListCommon.get(5));
+        assertEquals(CHECK_ARRAY.get(4), linkedListCommon.get(4));
+        assertEquals(CHECK_ARRAY.get(3), linkedListCommon.get(3));
+        assertEquals(CHECK_ARRAY.get(2), linkedListCommon.get(2));
+        assertEquals(CHECK_ARRAY.get(1), linkedListCommon.get(1));
+        assertEquals(CHECK_ARRAY.get(0), linkedListCommon.get(0));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -111,7 +114,8 @@ public class SingleLinkedListTest {
         List<Integer> linkedList = initListWithThreeElement();
 
         linkedList.set(0, 6);
-        assertEquals(linkedList.get(0), new Integer(6));
+
+        assertEquals(new Integer(6), linkedList.get(0));
     }
 
     @Test
@@ -119,7 +123,7 @@ public class SingleLinkedListTest {
         List<Integer> linkedList = initListWithThreeElement();
 
         linkedList.set(2, 7);
-        assertEquals(linkedList.get(2), new Integer(7));
+        assertEquals(new Integer(7), linkedList.get(2));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -161,42 +165,42 @@ public class SingleLinkedListTest {
 
     @Test
     public void indexOfWithCorrectValueShouldFound() {
-        assertEquals(linkedListCommon.indexOf(5), 0);
-        assertEquals(linkedListCommon.indexOf(1), 4);
-        assertEquals(linkedListCommon.indexOf(6), 6);
+        assertEquals(0, linkedListCommon.indexOf(5));
+        assertEquals(4, linkedListCommon.indexOf(1));
+        assertEquals(6, linkedListCommon.indexOf(6));
     }
 
     @Test
     public void indexOfWithUnknownValueShouldNotFound() {
-        assertEquals(linkedListCommon.indexOf(7), -1);
+        assertEquals(-1, linkedListCommon.indexOf(7));
     }
 
     @Test
     public void indexOfWithEmptyListValueShouldNotFound() {
-        assertEquals(linkedListCommon.indexOf(EMPTY_LIST), -1);
+        assertEquals(-1, linkedListCommon.indexOf(EMPTY_LIST));
     }
 
     @Test
     public void lastIndexOfWithCorrectValueShouldFound() {
-        assertEquals(linkedListCommon.lastIndexOf(1), 4);
-        assertEquals(linkedListCommon.lastIndexOf(5), 5);
-        assertEquals(linkedListCommon.lastIndexOf(6), 6);
+        assertEquals(4, linkedListCommon.lastIndexOf(1));
+        assertEquals(5, linkedListCommon.lastIndexOf(5));
+        assertEquals(6, linkedListCommon.lastIndexOf(6));
     }
 
     @Test
     public void lastIndexOfWithUnknownValueShouldNotFound() {
-        assertEquals(linkedListCommon.lastIndexOf(7), -1);
+        assertEquals(-1, linkedListCommon.lastIndexOf(7));
     }
 
     @Test
     public void lastIndexOfWithEmptyListValueShouldNotFound() {
-        assertEquals(linkedListCommon.lastIndexOf(EMPTY_LIST), -1);
+        assertEquals(-1, linkedListCommon.lastIndexOf(EMPTY_LIST));
     }
 
     @Test
     public void toArrayShouldReturnCorrectSize() {
         Object[] convertArray = linkedListCommon.toArray();
-        assertEquals(convertArray.length, CHECK_ARRAY.size());
+        assertEquals(CHECK_ARRAY.size(), convertArray.length);
     }
 
     @Test
@@ -204,110 +208,168 @@ public class SingleLinkedListTest {
         Object[] convertArray = linkedListCommon.toArray();
         for (int indexConvertArray = 0; indexConvertArray < convertArray.length; indexConvertArray++) {
             assertTrue(convertArray[indexConvertArray] instanceof Integer);
-            assertEquals(convertArray[indexConvertArray].getClass(), Integer.class);
-            assertEquals(convertArray[indexConvertArray], CHECK_ARRAY.get(indexConvertArray));
+            assertEquals(Integer.class, convertArray[indexConvertArray].getClass());
+            assertEquals(CHECK_ARRAY.get(indexConvertArray), convertArray[indexConvertArray]);
         }
     }
 
     @Test
-    public void toArraySameType() throws Exception {
-        Integer[] firstEmptyArray = new Integer[0];
-        Integer[] convertArrayEmpty = linkedListCommon.toArray(firstEmptyArray);
-        assertEquals(firstEmptyArray.length, 0);
-        assertEquals(linkedListCommon.size(), CHECK_ARRAY.size());
-        assertEquals(convertArrayEmpty.length, CHECK_ARRAY.size());
-        checkingToArraySameType(convertArrayEmpty);
+    public void toEmptyArrayShouldReturnSameArray() {
+        Integer[] emptyArray = new Integer[0];
 
+        Integer[] convertArrayEmpty = linkedListCommon.toArray(emptyArray);
+
+        assertEquals(0, emptyArray.length);
+        assertEquals(CHECK_ARRAY.size(), linkedListCommon.size());
+        assertEquals(CHECK_ARRAY.size(), convertArrayEmpty.length);
+        checkingToArraySameType(convertArrayEmpty);
+    }
+
+    @Test
+    public void toArrayWithLessSizeShouldReturnSameArray() {
+        Integer[] lessSizeArray = new Integer[1];
+        Integer[] convertArraySameSize = linkedListCommon.toArray(lessSizeArray);
+
+        assertEquals(1, lessSizeArray.length);
+        assertEquals(CHECK_ARRAY.size(), linkedListCommon.size());
+        assertEquals(CHECK_ARRAY.size(), convertArraySameSize.length);
+        checkingToArraySameType(convertArraySameSize);
+    }
+
+    @Test
+    public void toArrayWithSameSizeShouldReturnSameArray() {
         Integer[] sameSizeArray = new Integer[CHECK_ARRAY.size()];
         Integer[] convertArraySameSize = linkedListCommon.toArray(sameSizeArray);
-        assertEquals(sameSizeArray.length, CHECK_ARRAY.size());
-        assertEquals(linkedListCommon.size(), CHECK_ARRAY.size());
-        assertEquals(convertArraySameSize.length, CHECK_ARRAY.size());
-        checkingToArraySameType(convertArraySameSize);
 
+        assertEquals(CHECK_ARRAY.size(), sameSizeArray.length);
+        assertEquals(CHECK_ARRAY.size(), linkedListCommon.size());
+        assertEquals(CHECK_ARRAY.size(), convertArraySameSize.length);
+        checkingToArraySameType(convertArraySameSize);
+    }
+
+    @Test
+    public void toArrayWithBiggerSizeShouldReturnMixtureArray() {
         int biggerSize = CHECK_ARRAY_BIGGER.size();
         Integer[] biggerSizeArray = new Integer[CHECK_ARRAY_BIGGER.size()];
         for (int indexArray = 0; indexArray < CHECK_ARRAY_BIGGER.size(); indexArray++) {
             biggerSizeArray[indexArray] = CHECK_ARRAY_BIGGER.get(indexArray);
         }
+
         Integer[] convertArrayBiggerSize = linkedListCommon.toArray(biggerSizeArray);
-        assertEquals(biggerSizeArray.length, biggerSize);
-        assertEquals(linkedListCommon.size(), CHECK_ARRAY.size());
-        assertEquals(convertArrayBiggerSize.length, biggerSize);
+
+        assertEquals(biggerSize, biggerSizeArray.length);
+        assertEquals(CHECK_ARRAY.size(), linkedListCommon.size());
+        assertEquals(biggerSize, convertArrayBiggerSize.length);
         checkingToArraySameType(convertArrayBiggerSize);
-        for (int indexConvertArray = CHECK_ARRAY.size(); indexConvertArray < linkedListCommon.size(); indexConvertArray++) {
-            assertEquals(convertArrayBiggerSize[indexConvertArray].getClass(), Integer.class);
-            assertEquals(convertArrayBiggerSize[indexConvertArray], CHECK_ARRAY_BIGGER.get(indexConvertArray));
-            assertEquals(biggerSizeArray[indexConvertArray], CHECK_ARRAY_BIGGER.get(indexConvertArray));
-        }
+        checkLastPartBiggestArrayDidNotChange(biggerSizeArray, convertArrayBiggerSize);
     }
 
     private void checkingToArraySameType(Integer[] convertArray) {
-        for (int indexConvertArray = 0; indexConvertArray < CHECK_ARRAY.size(); indexConvertArray++) {
-            assertEquals(convertArray[indexConvertArray].getClass(), Integer.class);
-            assertEquals(convertArray[indexConvertArray], CHECK_ARRAY.get(indexConvertArray));
-            assertEquals(linkedListCommon.get(indexConvertArray), CHECK_ARRAY.get(indexConvertArray));
+        for (int index = 0; index < CHECK_ARRAY.size(); index++) {
+            assertEquals(Integer.class, convertArray[index].getClass());
+            assertEquals(CHECK_ARRAY.get(index), convertArray[index]);
+            assertEquals(CHECK_ARRAY.get(index), linkedListCommon.get(index));
         }
     }
 
-    @Test
-    public void remove() throws Exception {
+    private void checkLastPartBiggestArrayDidNotChange(Integer[] biggerSizeArray, Integer[] convertArrayBiggerSize) {
+        for (int indexConvertArray = CHECK_ARRAY.size(); indexConvertArray < linkedListCommon.size(); indexConvertArray++) {
+            assertEquals(Integer.class, convertArrayBiggerSize[indexConvertArray].getClass());
+            assertEquals(CHECK_ARRAY_BIGGER.get(indexConvertArray), convertArrayBiggerSize[indexConvertArray]);
+            assertEquals(CHECK_ARRAY_BIGGER.get(indexConvertArray), biggerSizeArray[indexConvertArray]);
+        }
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void removeEmptyListShouldThrowException() {
         List<Integer> linkedList = new SingleLinkedList<>();
-
-        thrown.expect(IndexOutOfBoundsException.class);
-        linkedList.remove(0);
-
-        linkedList.addAll(CHECK_ARRAY);
-
-        Integer removed;
-
-        removed = linkedList.remove(1);
-        assertEquals(removed, new Integer(4));
-        assertList(linkedList, asList(5, 3, 2, 1, 5, 6));
-
-        removed = linkedList.remove(0);
-        assertEquals(removed, new Integer(5));
-        assertList(linkedList, asList(3, 2, 1, 5, 6));
-
-        removed = linkedList.remove(4);
-        assertEquals(removed, new Integer(6));
-        assertList(linkedList, asList(3, 2, 1, 5));
-
-        linkedList.remove(7);
-
-        removed = linkedList.remove(2);
-        assertEquals(removed, new Integer(1));
-        assertList(linkedList, asList(3, 2, 5));
-
-        removed = linkedList.remove(1);
-        assertEquals(removed, new Integer(2));
-        assertList(linkedList, asList(3, 5));
-
-        removed = linkedList.remove(1);
-        assertEquals(removed, new Integer(5));
-        assertList(linkedList, singletonList(3));
-
-        removed = linkedList.remove(0);
-        assertEquals(removed, new Integer(3));
-        assertList(linkedList, EMPTY_LIST);
 
         linkedList.remove(0);
     }
 
     @Test
-    public void removeAdd() throws Exception {
+    public void afterRemoveElementShouldCutList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        linkedList.remove(linkedList.size() - 1);
-        assertList(linkedList, asList(5, 4, 3, 2, 1, 5));
 
-        linkedList.add(7);
-        assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 7));
+        Integer removed = linkedList.remove(1);
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertEquals(new Integer(4), removed);
+        assertList(asList(5, 3, 2, 1, 5, 6), linkedList);
+    }
+
+    @Test
+    public void afterTwiceRemoveElementShouldCutList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.remove(1);
+        Integer removed = linkedList.remove(0);
+
+        assertEquals(removed, new Integer(5));
+        assertList(linkedList, asList(3, 2, 1, 5, 6));
+    }
+
+    @Test
+    public void afterRemoveThreeRandomElementShouldCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.remove(1);
         linkedList.remove(0);
-        assertList(linkedList, asList(4, 3, 2, 1, 5, 6));
+        Integer removed = linkedList.remove(4);
 
+        assertEquals(new Integer(6), removed);
+        assertList(linkedList, asList(3, 2, 1, 5));
+    }
+
+    @Test
+    public void afterRemoveAllElementsShouldBeEmptyList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        for (int index = CHECK_ARRAY.size() - 1; 0 <= index; index--) {
+            linkedList.remove(index);
+        }
+
+        assertList(linkedList, EMPTY_LIST);
+    }
+
+    @Test
+    public void afterRemoveAllFirstElementsShouldBeEmptyList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        for (int index = 0; index < CHECK_ARRAY.size(); index++) {
+            linkedList.remove(0);
+        }
+
+        assertList(linkedList, EMPTY_LIST);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void afterRemoveTooManyElementsShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        for (int index = CHECK_ARRAY.size() - 1; 0 <= index; index--) {
+            linkedList.remove(index);
+        }
+
+        linkedList.remove(0);
+    }
+
+    @Test
+    public void afterRemoveLastElementAndAddShouldBeCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.remove(linkedList.size() - 1);
         linkedList.add(7);
+
+        assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 7));
+    }
+
+    @Test
+    public void afterRemoveFirstElementAndAddShouldBeCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.remove(0);
+        linkedList.add(7);
+
         assertList(linkedList, asList(4, 3, 2, 1, 5, 6, 7));
     }
 
@@ -483,10 +545,9 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void testToString() throws Exception {
-        List<Integer> listStandard = new ArrayList<>(CHECK_ARRAY);
+    public void toStringLikeArrayList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertEquals(linkedList.toString(), listStandard.toString());
+        assertEquals(linkedList.toString(), CHECK_ARRAY.toString());
     }
 
     @Test(expected = IllegalStateException.class)
