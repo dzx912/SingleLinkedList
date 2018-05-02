@@ -251,47 +251,6 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void toArraySameTypeStandard() throws Exception {
-        List<Integer> intArrayList = new ArrayList<>(CHECK_ARRAY);
-        Integer[] firstEmptyArray = new Integer[0];
-        assertEquals(firstEmptyArray.length, 0);
-        Integer[] convertArrayEmpty = intArrayList.toArray(firstEmptyArray);
-        assertEquals(convertArrayEmpty.length, CHECK_ARRAY.size());
-        checkingToArraySameTypeStandard(intArrayList, convertArrayEmpty);
-
-        Integer[] sameSizeArray = new Integer[CHECK_ARRAY.size()];
-        Integer[] convertArraySameSize = intArrayList.toArray(sameSizeArray);
-        assertEquals(sameSizeArray.length, CHECK_ARRAY.size());
-        assertEquals(convertArraySameSize.length, CHECK_ARRAY.size());
-        assertEquals(intArrayList.size(), CHECK_ARRAY.size());
-        checkingToArraySameTypeStandard(intArrayList, convertArraySameSize);
-
-        int biggerSize = CHECK_ARRAY_BIGGER.size();
-        Integer[] biggerSizeArray = new Integer[CHECK_ARRAY_BIGGER.size()];
-        for (int indexArray = 0; indexArray < CHECK_ARRAY_BIGGER.size(); indexArray++) {
-            biggerSizeArray[indexArray] = CHECK_ARRAY_BIGGER.get(indexArray);
-        }
-        Integer[] convertArrayBiggerSize = intArrayList.toArray(biggerSizeArray);
-        assertEquals(biggerSizeArray.length, biggerSize);
-        assertEquals(intArrayList.size(), CHECK_ARRAY.size());
-        assertEquals(convertArrayBiggerSize.length, biggerSize);
-        checkingToArraySameType(convertArrayBiggerSize);
-        for (int indexConvertArray = CHECK_ARRAY.size(); indexConvertArray < linkedListCommon.size(); indexConvertArray++) {
-            assertEquals(convertArrayBiggerSize[indexConvertArray].getClass(), Integer.class);
-            assertEquals(convertArrayBiggerSize[indexConvertArray], CHECK_ARRAY_BIGGER.get(indexConvertArray));
-            assertEquals(biggerSizeArray[indexConvertArray], CHECK_ARRAY_BIGGER.get(indexConvertArray));
-        }
-    }
-
-    private void checkingToArraySameTypeStandard(List<Integer> intArrayList, Integer[] convertArraySameSize) {
-        for (int indexConvertArray = 0; indexConvertArray < convertArraySameSize.length; indexConvertArray++) {
-            assertEquals(convertArraySameSize[indexConvertArray].getClass(), Integer.class);
-            assertEquals(convertArraySameSize[indexConvertArray], CHECK_ARRAY.get(indexConvertArray));
-            assertEquals(intArrayList.get(indexConvertArray), CHECK_ARRAY.get(indexConvertArray));
-        }
-    }
-
-    @Test
     public void remove() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>();
 
@@ -469,13 +428,6 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void removeAllStandard() throws Exception {
-        List<Integer> intArrayList = new ArrayList<>(CHECK_ARRAY);
-        intArrayList.removeAll(singletonList(5));
-        assertList(intArrayList, asList(4, 3, 2, 1, 6));
-    }
-
-    @Test
     public void retainAll() throws Exception {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         assertTrue(linkedList.retainAll(asList(1, 2, 3, 5)));
@@ -531,25 +483,6 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void subListStandard() throws Exception {
-        List<Integer> linkedList = new ArrayList<>(CHECK_ARRAY);
-        int size = linkedList.size();
-        assertList(linkedList.subList(0, size), CHECK_ARRAY);
-        assertList(linkedList.subList(1, 1), EMPTY_LIST);
-        assertList(linkedList.subList(1, 3), asList(4, 3));
-        assertList(linkedList.subList(1, 2), singletonList(4));
-
-        assertList(linkedList.subList(size, size), EMPTY_LIST);
-
-        thrown.expect(IllegalArgumentException.class);
-        assertList(linkedList.subList(2, 1), EMPTY_LIST);
-
-        thrown.expect(IndexOutOfBoundsException.class);
-        assertList(linkedList.subList(0, size + 1), EMPTY_LIST);
-        assertList(linkedList.subList(-1, size), EMPTY_LIST);
-    }
-
-    @Test
     public void testToString() throws Exception {
         List<Integer> listStandard = new ArrayList<>(CHECK_ARRAY);
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
@@ -561,19 +494,9 @@ public class SingleLinkedListTest {
         new SingleLinkedList<>(CHECK_ARRAY).listIterator().set(1);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void listIteratorSetIllegalStateStandard() throws Exception {
-        new ArrayList<>(CHECK_ARRAY).listIterator().set(1);
-    }
-
     @Test
     public void listIterator() throws Exception {
         listIterator(new SingleLinkedList<>(CHECK_ARRAY));
-    }
-
-    @Test
-    public void listIteratorStandard() throws Exception {
-        listIterator(new ArrayList<>(CHECK_ARRAY));
     }
 
     private void listIterator(List<Integer> linkedList) {
