@@ -506,7 +506,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void containsAllWithOnlyFoundElementsShouldReturnFalse() {
+    public void containsAllWithOnlyFoundElementsShouldReturnTrue() {
         assertTrue(linkedListCommon.containsAll(asList(1, 2, 3)));
     }
 
@@ -742,7 +742,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void toStringLikeArrayList() {
+    public void toStringShouldReturnTextLikeArrayList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         assertEquals(linkedList.toString(), CHECK_ARRAY.toString());
     }
