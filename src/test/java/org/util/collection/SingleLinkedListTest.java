@@ -469,16 +469,50 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void testAssertList() throws Exception {
+    public void testAssertList() {
         assertList(new SingleLinkedList<>(asList(1, 2)), new SingleLinkedList<>(asList(1, 2)));
 
         assertList(new SingleLinkedList<>(asList(2, 2)), new SingleLinkedList<>(asList(2, 2)));
     }
 
     @Test
-    public void containsAll() throws Exception {
+    public void containsAllWithEmptyListShouldReturnTrue() {
+        assertTrue(linkedListCommon.containsAll(EMPTY_LIST));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void containsAllWithNullShouldThrowException() {
+        assertTrue(linkedListCommon.containsAll(null));
+    }
+
+    @Test
+    public void containsAllByItselfShouldReturnTrue() {
+        assertTrue(linkedListCommon.containsAll(linkedListCommon));
+    }
+
+    @Test
+    public void containsAllByTheSameElementsShouldReturnTrue() {
+        assertTrue(linkedListCommon.containsAll(CHECK_ARRAY));
+    }
+
+    @Test
+    public void containsAllWithWrongTypeShouldReturnFalse() {
+        assertFalse(linkedListCommon.containsAll(asList("one", "two", "three")));
+    }
+
+    @Test
+    public void containsAllWithFoundAndNotFoundElementShouldReturnFalse() {
+        assertFalse(linkedListCommon.containsAll(asList(1, 99)));
+    }
+
+    @Test
+    public void containsAllWithOnlyFoundElementsShouldReturnFalse() {
         assertTrue(linkedListCommon.containsAll(asList(1, 2, 3)));
-        assertFalse(linkedListCommon.containsAll(asList(1, 2, 3, 7)));
+    }
+
+    @Test
+    public void containsAllWithOnlyNotFoundElementsShouldReturnFalse() {
+        assertFalse(linkedListCommon.containsAll(asList(99, 98, 97)));
     }
 
     @Test
