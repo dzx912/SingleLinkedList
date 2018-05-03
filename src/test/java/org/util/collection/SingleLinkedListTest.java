@@ -617,7 +617,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void removeAllUnknownElementShouldNotChangeList() {
+    public void removeAllUnknownElementsShouldNotChangeList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertFalse(linkedList.removeAll(asList(0, 9, 8, 7)));
@@ -625,39 +625,60 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void retainAll() throws Exception {
+
+    public void retainAllWithItselfShouldNotChangeList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertTrue(linkedList.retainAll(asList(1, 2, 3, 5)));
-        assertList(linkedList, asList(5, 3, 2, 1, 5));
 
-        linkedList.addAll(asList(2, 3, 4, 5));
-        assertList(linkedList, asList(5, 3, 2, 1, 5, 2, 3, 4, 5));
-
-        linkedList.add(7);
-        assertList(linkedList, asList(5, 3, 2, 1, 5, 2, 3, 4, 5, 7));
-
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertFalse(linkedList.retainAll(CHECK_ARRAY));
-        assertList(linkedList, CHECK_ARRAY);
-
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         assertTrue(linkedList.retainAll(EMPTY_LIST));
         assertList(linkedList, EMPTY_LIST);
+    }
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+    @Test
+    public void retainAllWithEmptyListShouldKeepNothing() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        assertFalse(linkedList.retainAll(asList(1, 2, 3, 4, 5, 6)));
+        assertList(linkedList, CHECK_ARRAY);
+    }
+
+    @Test
+    public void retainAllWithSameElementsShouldNotChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        assertFalse(linkedList.retainAll(CHECK_ARRAY));
+        assertList(linkedList, CHECK_ARRAY);
+    }
+
+    @Test
+    public void retainAllWithUnknownElementsShouldKeepNothing() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
         assertTrue(linkedList.retainAll(asList(7, 8, 9, 10)));
         assertList(linkedList, EMPTY_LIST);
+    }
 
-        linkedList.add(1);
-        linkedList.add(2);
-        assertList(linkedList, asList(1, 2));
+    @Test
+    public void retainAllWithMultipleOccurrenceElementShouldCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertTrue(linkedList.retainAll(asList(8, 1, 9, 10)));
-        assertList(linkedList, singletonList(1));
+        assertTrue(linkedList.retainAll(Collections.singletonList(5)));
+        assertList(linkedList, asList(5, 5));
+    }
 
-        linkedList.addAll(asList(2, 3, 4, 5));
-        assertList(linkedList, asList(1, 2, 3, 4, 5));
+    @Test
+    public void retainAllWithOneElementShouldCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        assertTrue(linkedList.retainAll(Collections.singletonList(1)));
+        assertList(linkedList, Collections.singletonList(1));
+    }
+
+    @Test
+    public void retainAllWithAFewKnownElementsShouldCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        assertTrue(linkedList.retainAll(asList(1, 2, 3, 5)));
+        assertList(linkedList, asList(5, 3, 2, 1, 5));
     }
 
     @Test
