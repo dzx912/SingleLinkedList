@@ -540,20 +540,41 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void addAllIndex() throws Exception {
+    public void addAllByIndexEmptyListShouldNotChangeList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(0, EMPTY_LIST));
         assertList(linkedList, CHECK_ARRAY);
+    }
+
+    @Test
+    public void addAllByIndexToTailListShouldChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(CHECK_ARRAY.size() - 1, asList(0, 9, 8, 7)));
         assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+    }
+
+    @Test
+    public void addAllByIndexToMiddleListShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(2, asList(11, 12, 13, 14)));
-        assertList(linkedList, asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6, 0, 9, 8, 7));
+        assertList(linkedList, asList(5, 4, 3, 11, 12, 13, 14, 2, 1, 5, 6));
+    }
 
-        thrown.expect(IndexOutOfBoundsException.class);
-        assertTrue(linkedList.addAll(linkedList.size(), asList(0, 9, 8, 7)));
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void addAllByIndexTooManyIndexShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.addAll(CHECK_ARRAY.size(), asList(0, 9, 8, 7));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void addAllByIndexTooLittleIndexShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.addAll(-1, asList(0, 9, 8, 7));
     }
 
     @Test

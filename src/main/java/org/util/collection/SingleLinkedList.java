@@ -223,6 +223,9 @@ public class SingleLinkedList<T> implements List<T> {
     }
 
     public boolean addAll(int index, Collection<? extends T> collection) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException(String.format("Too little index: %d", index));
+        }
         int sizeBefore = size();
         ElementList<T> searchElement = search(index);
         for (T element : collection) {
