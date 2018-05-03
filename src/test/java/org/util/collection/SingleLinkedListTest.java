@@ -295,7 +295,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveElementShouldCutList() {
+    public void afterRemoveElementByIndexShouldCutList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         Integer removed = linkedList.remove(1);
@@ -305,7 +305,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterTwiceRemoveElementShouldCutList() {
+    public void afterTwiceRemoveElementByIndexShouldCutList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         linkedList.remove(1);
@@ -316,7 +316,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveThreeRandomElementShouldCorrectList() {
+    public void afterRemoveThreeNotOrderElementByIndexShouldCorrectList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         linkedList.remove(1);
@@ -328,7 +328,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveAllElementsShouldBeEmptyList() {
+    public void afterRemoveAllElementsByIndexShouldBeEmptyList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         for (int index = CHECK_ARRAY.size() - 1; 0 <= index; index--) {
@@ -339,7 +339,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveAllElementsByRandomOrderShouldBeEmptyList() {
+    public void afterRemoveAllElementsByIndexByRandomOrderShouldBeEmptyList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         IntUnaryOperator reverseIndex = index -> linkedList.size() - index;
@@ -361,7 +361,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveAllFirstElementsShouldBeEmptyList() {
+    public void afterRemoveAllFirstElementsByIndexShouldBeEmptyList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         for (int index = 0; index < CHECK_ARRAY.size(); index++) {
@@ -372,7 +372,7 @@ public class SingleLinkedListTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void afterRemoveTooManyElementsShouldThrowException() {
+    public void afterRemoveTooManyElementsByIndexShouldThrowException() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         for (int index = CHECK_ARRAY.size() - 1; 0 <= index; index--) {
@@ -383,7 +383,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveLastElementAndAddShouldBeCorrectList() {
+    public void afterRemoveLastElementByIndexAndAddShouldBeCorrectList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         linkedList.remove(linkedList.size() - 1);
@@ -393,7 +393,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void afterRemoveFirstElementAndAddShouldBeCorrectList() {
+    public void afterRemoveFirstElementByIndexAndAddShouldBeCorrectList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         linkedList.remove(0);
@@ -403,41 +403,55 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void removeObject() throws Exception {
+    public void afterRemoveElementByValueShouldCutList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        boolean isRemoved;
+        boolean isRemoved = linkedList.remove(new Integer(4));
 
-        isRemoved = linkedList.remove(new Integer(4));
-        assertEquals(isRemoved, true);
+        assertTrue(isRemoved);
         assertList(linkedList, asList(5, 3, 2, 1, 5, 6));
+    }
 
-        isRemoved = linkedList.remove(new Integer(5));
+    @Test
+    public void afterTwiceRemoveElementByValueShouldCutList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.remove(new Integer(4));
+        boolean isRemoved = linkedList.remove(new Integer(5));
+
         assertEquals(isRemoved, true);
         assertList(linkedList, asList(3, 2, 1, 6));
+    }
 
-        isRemoved = linkedList.remove(new Integer(6));
-        assertEquals(isRemoved, true);
-        assertList(linkedList, asList(3, 2, 1));
+    @Test
+    public void afterRemoveAFewNotOrderElementByValueShouldCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        isRemoved = linkedList.remove(new Integer(5));
+        linkedList.remove(new Integer(4));
+        linkedList.remove(new Integer(5));
+        linkedList.remove(new Integer(6));
+        boolean isRemoved = linkedList.remove(new Integer(5));
+
         assertEquals(isRemoved, false);
         assertList(linkedList, asList(3, 2, 1));
+    }
 
-        isRemoved = linkedList.remove("Wrong type");
-        assertEquals(isRemoved, false);
-        assertList(linkedList, asList(3, 2, 1));
+    @Test
+    public void removeObjectWithWrongTypeShouldNotChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        isRemoved = linkedList.remove(new Integer(3));
-        assertEquals(isRemoved, true);
-        assertList(linkedList, asList(2, 1));
+        boolean isRemoved = linkedList.remove("Wrong type");
 
-        isRemoved = linkedList.remove(new Integer(1));
-        assertEquals(isRemoved, true);
-        assertList(linkedList, singletonList(2));
+        assertFalse(isRemoved);
+        assertList(linkedList, CHECK_ARRAY);
+    }
 
-        isRemoved = linkedList.remove(new Integer(2));
-        assertEquals(isRemoved, true);
+    @Test
+    public void afterRemoveAllObjectsShouldBeEmpty() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        CHECK_ARRAY.forEach(linkedList::remove);
+
         assertList(linkedList, EMPTY_LIST);
     }
 
