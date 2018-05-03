@@ -516,14 +516,27 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void addAll() throws Exception {
+    public void addAllWithEmptyListShouldReturnFalseAndNotChangeList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertFalse(linkedList.addAll(EMPTY_LIST));
         assertList(linkedList, CHECK_ARRAY);
+    }
+
+    @Test
+    public void afterAddAllShouldBeCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
         assertTrue(linkedList.addAll(asList(0, 9, 8, 7)));
         assertList(linkedList, asList(5, 4, 3, 2, 1, 5, 6, 0, 9, 8, 7));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addAllWrongTypeShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        assertTrue(linkedList.addAll(null));
+        assertList(linkedList, CHECK_ARRAY);
     }
 
     @Test
