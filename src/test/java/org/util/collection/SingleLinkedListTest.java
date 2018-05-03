@@ -578,24 +578,48 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void removeAll() throws Exception {
+    public void removeAllWithEmptyListShouldNotChangeList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertTrue(linkedList.removeAll(singletonList(5)));
-        assertList(linkedList, asList(4, 3, 2, 1, 6));
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        assertFalse(linkedList.removeAll(EMPTY_LIST));
+        assertList(linkedList, CHECK_ARRAY);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void removeAllWithNullShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.removeAll(null);
+    }
+
+    @Test
+    public void removeAllLastElementShouldCorrectChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
         assertTrue(linkedList.removeAll(singletonList(6)));
         assertList(linkedList, asList(5, 4, 3, 2, 1, 5));
+    }
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+    @Test
+    public void removeAllWithMultipleOccurrenceElementShouldCorrectChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        assertTrue(linkedList.removeAll(singletonList(5)));
+        assertList(linkedList, asList(4, 3, 2, 1, 6));
+    }
+
+    @Test
+    public void removeAllWithAFewElementShouldCorrectChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
         assertTrue(linkedList.removeAll(asList(4, 3, 1)));
         assertList(linkedList, asList(5, 2, 5, 6));
+    }
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
-        assertTrue(linkedList.removeAll(CHECK_ARRAY));
-        assertList(linkedList, EMPTY_LIST);
+    @Test
+    public void removeAllUnknownElementShouldNotChangeList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
 
-        linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         assertFalse(linkedList.removeAll(asList(0, 9, 8, 7)));
         assertList(linkedList, CHECK_ARRAY);
     }
