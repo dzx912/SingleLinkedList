@@ -682,22 +682,63 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void subList() throws Exception {
+    public void subListWithFullListShouldReturnSame() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        List<Integer> subList = linkedList.subList(1, 1);
+
+        assertList(subList, EMPTY_LIST);
+    }
+
+    @Test
+    public void subListBetweenSameIndexShouldReturnEmptyList() {
         List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
         int size = linkedList.size();
-        assertList(linkedList.subList(0, size), CHECK_ARRAY);
-        assertList(linkedList.subList(1, 1), EMPTY_LIST);
-        assertList(linkedList.subList(1, 3), asList(4, 3));
-        assertList(linkedList.subList(1, 2), singletonList(4));
 
-        assertList(linkedList.subList(size, size), EMPTY_LIST);
+        List<Integer> subList = linkedList.subList(0, size);
 
-        thrown.expect(IllegalArgumentException.class);
-        assertList(linkedList.subList(2, 1), EMPTY_LIST);
+        assertList(subList, CHECK_ARRAY);
+    }
 
-        thrown.expect(IndexOutOfBoundsException.class);
-        assertList(linkedList.subList(0, size + 1), EMPTY_LIST);
-        assertList(linkedList.subList(-1, size), EMPTY_LIST);
+    @Test
+    public void subListWithOneElementShouldReturnCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        List<Integer> subList = linkedList.subList(1, 2);
+
+        assertList(subList, singletonList(4));
+    }
+
+    @Test
+    public void subListWithTwoElementShouldReturnCorrectList() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        List<Integer> subList = linkedList.subList(1, 3);
+
+        assertList(subList, asList(4, 3));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void subListWithWrongOrderIndicesShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+
+        linkedList.subList(2, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void subListWithTooBiggerIndexShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        int size = linkedList.size();
+
+        linkedList.subList(0, size + 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void subListWithTooLittleIndexShouldThrowException() {
+        List<Integer> linkedList = new SingleLinkedList<>(CHECK_ARRAY);
+        int size = linkedList.size();
+
+        linkedList.subList(-1, size);
     }
 
     @Test
